@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -48,16 +49,43 @@ namespace TunashaProjects.Controllers
         // POST: Posts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title,Content")] Post post, IEnumerable<HttpPostedFileBase> file)
+        public ActionResult Create(PostViewModel post, ICollection<HttpPostedFileBase> files, ICollection<string> imgText)
         {
             if (ModelState.IsValid)
             {
-                post.Date = DateTime.Now.Date;
-                
-                db.Post.Add(post);
+                string s = new Guid().ToString();
+                Post p = new Post()
+                {
+                    Content = post.Content,
+                    Title = post.Title,
+                    Date = DateTime.Now.Date,
+                    //fix this
+                    UserID = 1
+                };
+
+
+                for (int i = 0; i < files.Count; i++)
+                {
+                    var img = files.ElementAt(i);
+                    if (img != null)
+                    {
+                        string imgName = Path.GetFileName(img.FileName);
+                        var file = new PostedFile()
+                        {
+                            Text = imgText.ElementAt(i),
+                            DateAdded = DateTime.Now,
+                            FilePath = Path.Combine(Server.MapPath("~/Images/Posts"), Guid.NewGuid().ToString() + "_" + imgName)
+                        };
+                        img.SaveAs(file.FilePath);
+                        db.File.Add(file);
+                        p.Images.Add(file);
+                    }
+                }
+
+                db.Post.Add(p);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

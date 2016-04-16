@@ -13,7 +13,7 @@ namespace TunashaProjects.DAL
         public DataContext() : base ("DataContext"){}
 
         public DbSet<User> User { get; set; }
-        public DbSet<File> File { get; set; }
+        public DbSet<PostedFile> File { get; set; }
         public DbSet<Question> Question { get; set; }
         public DbSet<Reply> Reply { get; set; }
         public DbSet<Post> Post { get; set; }
