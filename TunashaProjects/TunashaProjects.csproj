@@ -134,7 +134,16 @@
     <Compile Include="Migrations\201604161038284_change_of_name_in_db.Designer.cs">
       <DependentUpon>201604161038284_change_of_name_in_db.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604161108305_change_of_name_in_db1.cs" />
+    <Compile Include="Migrations\201604161108305_change_of_name_in_db1.Designer.cs">
+      <DependentUpon>201604161108305_change_of_name_in_db1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604161308038_change_of_namemm.cs" />
+    <Compile Include="Migrations\201604161308038_change_of_namemm.Designer.cs">
+      <DependentUpon>201604161308038_change_of_namemm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Misc\HtmlExtensions.cs" />
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -185,6 +194,7 @@
     <Content Include="Views\Posts\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Posts\Create.cshtml" />
+    <Content Include="Views\Posts\_AddComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -203,6 +213,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604161038284_change_of_name_in_db.resx">
       <DependentUpon>201604161038284_change_of_name_in_db.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604161108305_change_of_name_in_db1.resx">
+      <DependentUpon>201604161108305_change_of_name_in_db1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604161308038_change_of_namemm.resx">
+      <DependentUpon>201604161308038_change_of_namemm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

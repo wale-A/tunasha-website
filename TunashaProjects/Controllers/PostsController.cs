@@ -21,7 +21,7 @@ namespace TunashaProjects.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View(db.Post.ToList());
+            return View(db.Post.Include(x => x.PostedBy).ToList());
         }
 
         // GET: Posts/Details/5
@@ -61,7 +61,7 @@ namespace TunashaProjects.Controllers
                 {
                     Content = post.Content,
                     Title = post.Title,
-                    Date = DateTime.Now.Date,
+                    Date = DateTime.Now,
                     //fix this
                     UserID = 1
                 };
@@ -157,6 +157,49 @@ namespace TunashaProjects.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        //public ActionResult AddComment(CommentViewModel comment, int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Post post = db.Post.Find(id);
+        //    if (post == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(post);
+        //}
+
+        // POST: Posts/Delete/5
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddComment(string name, string comment, int postID)
+        {
+            Post post = db.Post.Find(postID);
+            Comment c = new Comment()
+            {
+                Text = comment,
+                Name = name,
+                Date = DateTime.Now,
+                PostID = postID
+            };
+            db.Comment.Add(c);
+            post.Comments.Add(c);
+            db.Entry(post).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = postID });
+        }
+
+        public ActionResult DeleteComment(int commentID, int postID)
+        {
+            var comment = db.Comment.Find(commentID);
+            db.Entry(comment).State = EntityState.Deleted;
+            db.SaveChanges();
+            return RedirectToAction("Details", new { id = postID });
         }
     }
 }

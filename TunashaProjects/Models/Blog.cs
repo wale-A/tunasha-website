@@ -21,10 +21,15 @@ namespace TunashaProjects.Models
         [Required, DataType(DataType.MultilineText)]
         public string Content { get; set; }
         public DateTime Date { get; set; }
+        public bool DisableComment { get; set; }
+
+        [ScaffoldColumn (false)]
+        public string MiniContent { get { return this.Content.Substring(0, 150) + "...."; } }
 
         public int UserID { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<PostedFile> Images { get; set; }
+        public virtual User PostedBy { get; set; }
     }
 
     public class PostViewModel
@@ -39,14 +44,20 @@ namespace TunashaProjects.Models
     {
         [Key]
         public int CommentID { get; set; }
-        [Required, DataType(DataType.MultilineText)]
+        [Required]
         public string Text { get; set; }
-        [Required, Display(Name = "Full Name")]
+        [Required]
         public string Name { get; set; }
-        [Required, DataType(DataType.EmailAddress), Display(Name = "Email Address")]
-        public string Email { get; set; }
         public DateTime Date { get; set; }
 
         public int PostID { get; set; }
+    }
+
+    public class CommentViewModel
+    {
+        [Required]
+        public string Name { get; set; }
+        [Required, DataType(DataType.MultilineText)]
+        public string Text { get; set; }
     }
 }
