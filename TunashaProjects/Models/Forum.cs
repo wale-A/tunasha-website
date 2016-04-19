@@ -53,4 +53,6 @@ namespace TunashaProjects.Models
         public DateTime Date { get; set; }
 
     }
+
+
 }

@@ -145,6 +145,39 @@ namespace TunashaProjects.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddReply(string reply, int? questionId)
+        {
+            if (questionId == null )
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            
+            Question question = db.Question.Find(questionId);
+            if (question == null)
+                return HttpNotFound();
+
+            User u = db.User.SingleOrDefault(x => x.Name == User.Identity.Name);
+            if (reply != "")
+            {
+                Reply r = new Models.Reply()
+                {
+                    Text = reply,
+                    Date = DateTime.Now,
+                    QuestionID = questionId.Value,
+                    Name = u.Name,
+                    UserID = u.UserID
+                };
+
+                db.Reply.Add(r);
+                question.Replies.Add(r);
+                db.Entry(question).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = questionId.Value });
+            }
+            return RedirectToAction("Details", new { id = questionId.Value });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
