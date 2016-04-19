@@ -14,15 +14,16 @@ namespace TunashaProjects.Models
         }
 
         public int ID { get; set; }
-        [DataType(DataType.MultilineText), Required, Display(Name = "Question")]
+        [Required, Display(Name = "Question")]
         public string Text { get; set; }
-        [Required, Display(Name = "Full Name")]
+        [Required]
         public string Name { get; set; }
-        [Required, DataType(DataType.EmailAddress), Display(Name = "Email Address")]
+        [Required]
         public string Email { get; set; }
         //[ScaffoldColumn(false)]
         public DateTime Date { get; set; }
 
+        public string MiniText { get { return Text.Substring(0, 200); } }
         public virtual ICollection<Reply> Replies { get; set; }
     }
 
@@ -38,5 +39,18 @@ namespace TunashaProjects.Models
 
         public int QuestionID { get; set; }
         public int UserID { get; set; }
+    }
+
+    public class QuestionViewModel
+    {
+        [DataType(DataType.MultilineText), Required, Display(Name = "Question")]
+        public string Text { get; set; }
+        [Required, Display(Name = "Full Name")]
+        public string Name { get; set; }
+        [Required, DataType(DataType.EmailAddress), Display(Name = "Email Address")]
+        public string Email { get; set; }
+        //[ScaffoldColumn(false)]
+        public DateTime Date { get; set; }
+
     }
 }

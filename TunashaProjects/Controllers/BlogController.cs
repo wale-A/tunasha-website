@@ -13,7 +13,7 @@ using TunashaProjects.Models;
 namespace TunashaProjects.Controllers
 {
     [Authorize]
-    public class PostsController : Controller
+    public class BlogController : Controller
     {
         private DataContext db = new DataContext();
 
