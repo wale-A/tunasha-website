@@ -21,7 +21,7 @@ namespace TunashaProjects.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View(db.Post.Include(x => x.PostedBy).ToList());
+            return View(db.Posts.Include(x => x.PostedBy).ToList());
         }
 
         // GET: Posts/Details/5
@@ -32,7 +32,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Post.Find(id);
+            Post post = db.Posts.Find(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -80,12 +80,12 @@ namespace TunashaProjects.Controllers
                             FilePath = Path.Combine(Server.MapPath("~/Images/Posts"), Guid.NewGuid().ToString() + "_" + imgName)
                         };
                         img.SaveAs(file.FilePath);
-                        db.File.Add(file);
+                        db.Files.Add(file);
                         p.Images.Add(file);
                     }
                 }
 
-                db.Post.Add(p);
+                db.Posts.Add(p);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -100,7 +100,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Post.Find(id);
+            Post post = db.Posts.Find(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -131,7 +131,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Post.Find(id);
+            Post post = db.Posts.Find(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -144,8 +144,8 @@ namespace TunashaProjects.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Post post = db.Post.Find(id);
-            db.Post.Remove(post);
+            Post post = db.Posts.Find(id);
+            db.Posts.Remove(post);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -179,7 +179,7 @@ namespace TunashaProjects.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddComment(string name, string comment, int postID)
         {
-            Post post = db.Post.Find(postID);
+            Post post = db.Posts.Find(postID);
             Comment c = new Comment()
             {
                 Text = comment,
@@ -187,7 +187,7 @@ namespace TunashaProjects.Controllers
                 Date = DateTime.Now,
                 PostID = postID
             };
-            db.Comment.Add(c);
+            db.Comments.Add(c);
             post.Comments.Add(c);
             db.Entry(post).State = EntityState.Modified;
             db.SaveChanges();
@@ -196,7 +196,7 @@ namespace TunashaProjects.Controllers
 
         public ActionResult DeleteComment(int commentID, int postID)
         {
-            var comment = db.Comment.Find(commentID);
+            var comment = db.Comments.Find(commentID);
             db.Entry(comment).State = EntityState.Deleted;
             db.SaveChanges();
             return RedirectToAction("Details", new { id = postID });

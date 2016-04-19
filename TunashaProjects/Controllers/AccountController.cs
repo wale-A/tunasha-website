@@ -52,7 +52,7 @@ namespace TunashaProjects.Controllers
         {
             if (ModelState.IsValid)
             {
-                User u = db.User.SingleOrDefault(x => x.Email == user.Email && x.Password == user.Password);
+                User u = db.Users.SingleOrDefault(x => x.Email == user.Email && x.Password == user.Password);
                 if (u != null)
                     FormsAuthentication.RedirectFromLoginPage(u.Name, user.RememberMe);
                 

@@ -151,13 +151,19 @@
     <Compile Include="Migrations\201604161308038_change_of_namemm.Designer.cs">
       <DependentUpon>201604161308038_change_of_namemm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604191758395_shop.cs" />
+    <Compile Include="Migrations\201604191758395_shop.Designer.cs">
+      <DependentUpon>201604191758395_shop.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Misc\Enums.cs" />
     <Compile Include="Misc\HtmlExtensions.cs" />
     <Compile Include="Misc\MyExtensionMethods.cs" />
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\Forum.cs" />
     <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604161308038_change_of_namemm.resx">
       <DependentUpon>201604161308038_change_of_namemm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604191758395_shop.resx">
+      <DependentUpon>201604191758395_shop.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -27,7 +27,7 @@ namespace TunashaProjects.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            context.User.AddOrUpdate(
+            context.Users.AddOrUpdate(
                 p => p.Name,
                 new User
                 {

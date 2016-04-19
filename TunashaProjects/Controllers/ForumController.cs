@@ -22,7 +22,7 @@ namespace TunashaProjects.Controllers
         {
             //searchQuery = searchQuery.ToLower();
             List<Question> listOfQuestions = new List<Question>();
-            var list = db.Question.OrderByDescending(x => x.Date);
+            var list = db.Questions.OrderByDescending(x => x.Date);
             if (searchQuery != null)
             {
                 page = 1;
@@ -50,7 +50,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Question question = db.Question.Find(id);
+            Question question = db.Questions.Find(id);
             if (question == null)
             {
                 return HttpNotFound();
@@ -80,7 +80,7 @@ namespace TunashaProjects.Controllers
                     Name = question.Name,
                     Date = DateTime.Now
                 };
-                db.Question.Add(q);
+                db.Questions.Add(q);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -95,7 +95,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Question question = db.Question.Find(id);
+            Question question = db.Questions.Find(id);
             if (question == null)
             {
                 return HttpNotFound();
@@ -126,7 +126,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Question question = db.Question.Find(id);
+            Question question = db.Questions.Find(id);
             if (question == null)
             {
                 return HttpNotFound();
@@ -139,8 +139,8 @@ namespace TunashaProjects.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Question question = db.Question.Find(id);
-            db.Question.Remove(question);
+            Question question = db.Questions.Find(id);
+            db.Questions.Remove(question);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -153,11 +153,11 @@ namespace TunashaProjects.Controllers
             if (questionId == null )
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
-            Question question = db.Question.Find(questionId);
+            Question question = db.Questions.Find(questionId);
             if (question == null)
                 return HttpNotFound();
 
-            User u = db.User.SingleOrDefault(x => x.Name == User.Identity.Name);
+            User u = db.Users.SingleOrDefault(x => x.Name == User.Identity.Name);
             if (reply != "")
             {
                 Reply r = new Models.Reply()
@@ -169,7 +169,7 @@ namespace TunashaProjects.Controllers
                     UserID = u.UserID
                 };
 
-                db.Reply.Add(r);
+                db.Replies.Add(r);
                 question.Replies.Add(r);
                 db.Entry(question).State = EntityState.Modified;
                 db.SaveChanges();
