@@ -11,6 +11,20 @@
     <hr />
     <p>@Html.TextFormatter(Model.Content)</p>
     <br />
+    <div class="row">
+        @foreach (var image in Model.Images)
+        {
+            <div class="col-sm-6">
+                <div class="thumbnail">
+                    @Html.ImageFormatter(image)
+                    <div class="caption">
+                        <p class="text-muted">@image.Text</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br />
     <p class="text-success   pull-right">@Model.PostedBy.Name - - @Model.Date</p>
 </div>
 

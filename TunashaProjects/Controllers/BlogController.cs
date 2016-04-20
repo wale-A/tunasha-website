@@ -32,7 +32,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Posts.Find(id);
+            Post post = db.Posts.Include(p => p.Images).SingleOrDefault(p => p.PostID == id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -77,7 +77,8 @@ namespace TunashaProjects.Controllers
                         {
                             Text = imgText.ElementAt(i),
                             DateAdded = DateTime.Now,
-                            FilePath = Path.Combine(Server.MapPath("~/Images/Posts"), Guid.NewGuid().ToString() + "_" + imgName)
+                            FilePath = Path.Combine(Server.MapPath("~/Images/Blog"), Guid.NewGuid().ToString() + "_" + imgName)
+                            //FilePath = Path.Combine(@"~\Images\Blog", Guid.NewGuid().ToString() + "_" + imgName)
                         };
                         img.SaveAs(file.FilePath);
                         db.Files.Add(file);

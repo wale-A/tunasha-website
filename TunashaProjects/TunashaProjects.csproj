@@ -131,6 +131,7 @@
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="DAL\DataContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -154,6 +155,10 @@
     <Compile Include="Migrations\201604191758395_shop.cs" />
     <Compile Include="Migrations\201604191758395_shop.Designer.cs">
       <DependentUpon>201604191758395_shop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604192310022_changeInProduct.cs" />
+    <Compile Include="Migrations\201604192310022_changeInProduct.Designer.cs">
+      <DependentUpon>201604192310022_changeInProduct.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Misc\Enums.cs" />
@@ -218,9 +223,15 @@
     <Content Include="Views\Forum\Index.cshtml" />
     <Content Include="Views\Forum\Create.cshtml" />
     <Content Include="Views\Forum\reply.cshtml" />
+    <Content Include="Views\Shop\Delete.cshtml" />
+    <Content Include="Views\Shop\Details.cshtml" />
+    <Content Include="Views\Shop\Edit.cshtml" />
+    <Content Include="Views\Shop\Index.cshtml" />
+    <Content Include="Views\Shop\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Blog\" />
     <Folder Include="Images\Posts\" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604191758395_shop.resx">
       <DependentUpon>201604191758395_shop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604192310022_changeInProduct.resx">
+      <DependentUpon>201604192310022_changeInProduct.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
