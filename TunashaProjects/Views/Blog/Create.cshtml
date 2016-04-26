@@ -1,82 +1,171 @@
 ﻿@model TunashaProjects.Models.PostViewModel
-
 @{
-    ViewBag.Title = "Create";
+    Layout = null;
 }
 
-<h2>New Post</h2>
+<!DOCTYPE html>
 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <title>New Post</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="blog">
 
-@using (Html.BeginForm("Create", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        @*<h4>PostViewModel</h4>*@
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#blog-navbar"
+                            aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Tunasha</a>
+                </div>
+                <div class="collapse navbar-collapse" id="blog-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/" class="text-uppercase">Home</a></li>
+                        <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
+                        <li><a data-toggle="modal" href="#subscribe-modal" class="text-uppercase">Subscribe</a></li>
+                        <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                    </ul>
+                </div>
             </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="h1 page-header">
+            New Post
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @using (Html.BeginForm("Create", "Blog", new { enctype = "multipart/form-data" }, FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            <p>Add pictures :</p>
-            <div class="upload-container col-sm-10 col-sm-offset-2">
-                <div class="upload">
-                    <div class="image">
-                        <div class="form-inline">
-                            <input type="file" accept="image/*" name="files" id="file1" class="form-control" />
-                            <img src="@Url.Content("~/Images/delete.png")" alt="Remove picture" />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-12">
+                    <textarea name="Content" class="form-control"></textarea>
+                    @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <p>Add pictures :</p>
+                <div class="upload-container col-sm-10 col-sm-offset-2">
+                    <div class="upload">
+                        <div class="image">
+                            <div class="form-inline">
+                                <input type="file" accept="image/*" name="files" id="file1" class="form-control" />
+                                <img src="@Url.Content("~/Images/delete.png")" alt="Remove picture" />
+                            </div>
+                            <input type="text" class="form-control" name="imgText" placeholder="image text">
                         </div>
-                        @*add a small space btw these two*@
-                        <input type="text" class="form-control" name="imgText" placeholder="image text">
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Post" class="btn btn-default" />
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Post" class="btn btn-info" />
+                </div>
+            </div>
+        }
+
+        <p>
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div> 
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="logo">Tunasha</div>
+                    <p>
+                        At Tunasha, we are on a mission to help our customers with all they need for their electronics
+                        projects. Tools, components, techniques, lessons, we've got it all.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Contact Us</b></p>
+
+                    <div class="address-panel">
+                        <span class="flag nigeria"></span>
+                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong><br>
+                        <p>+234 8060989216<br /> +234 8137755683</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Email: </strong><span id="contact_mail"> akinsegun06@yahoo.com</span></p>
+                    <p>&copy;2016 Tunasha. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Social Media</b></p>
+                    <ul class="social-media">
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="twitter"><i class="fa fa-twitter fa-2x"></i></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="facebook"><i class="fa fa-facebook-f fa-2x"></i></div>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
             </div>
         </div>
-    </div>
-}
+    </footer>
 
-@*<div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>*@
+</body>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/siteScript")
+@Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
-        $(document).ready(function () {
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>
+    tinymce.init({ selector: 'textarea' });
+</script>
 
 
-            var currentImage = 1;
-            $("body").on("change", "input[name='files']", function () {
-                var pathToRemoveIcon = "@Url.Content("~/Images/delete.png")";
-                currentImage += 1;
-                var htmlToAppend = '<br/><div class="upload"><div class="image"><div class="form-inline"><input type="file" accept="image/*" name="files" id= "file' + currentImage + '" class="form-control" /> <img src="@Url.Content("~/Images/delete.png")" alt="Remove picture" /></div><input type="text" class="form-control" name="imgText" id="imgText" placeholder="image text"></div> </div>';
-                $('.upload-container').append(htmlToAppend);
-            }).on("click", ".upload img", function () {
-                if ($(this).parent().parent().parent().siblings.length > 0) {
-                    $(this).parent().parent().parent().remove();
-                }
-            });
+<script type="text/javascript">
+    $(document).ready(function () {
+        var currentImage = 1;
+        $("body").on("change", "input[name='files']", function () {
+            var pathToRemoveIcon = "@Url.Content("~/Images/delete.png")";
+            currentImage += 1;
+            var htmlToAppend = '<br/><div class="upload"><div class="image"><div class="form-inline"><input type="file" accept="image/*" name="files" id= "file' + currentImage + '" class="form-control" /> <img src="@Url.Content("~/Images/delete.png")" alt="Remove picture" /></div><input type="text" class="form-control" name="imgText" id="imgText" placeholder="image text"></div> </div>';
+            $('.upload-container').append(htmlToAppend);
+        }).on("click", ".upload img", function () {
+            if ($(this).parent().parent().parent().siblings.length > 0) {
+                $(this).parent().parent().parent().remove();
+            }
         });
-    </script>
-}
+    });
+</script>
+
+
+</html>

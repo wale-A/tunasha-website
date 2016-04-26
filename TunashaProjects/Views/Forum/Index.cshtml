@@ -1,106 +1,309 @@
 ﻿@model PagedList.IPagedList<TunashaProjects.Models.Question>
 @using PagedList.Mvc;
 @using TunashaProjects.Misc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Forum";
+    Layout = null;
 }
 
-<h2>Forum</h2>
+<!DOCTYPE html>
 
-<p>
-    @Html.ActionLink("New Question", "Create")
-</p>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <title>Forum List</title>
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+</head>
 
-@using (Html.BeginForm("Index", "Forum", FormMethod.Get, new { @class = "form-inline" }))
-{
-    <div class="form-horizontal">
-        <span class="">Search</span> 
-        @Html.TextBox("searchQuery", ViewBag.CurrentFilter as string, new { @class = "form-control" })
-        <button type="submit" class="btn btn-danger"> <i class="glyphicon glyphicon-search"></i> </button>
+<body class="forum">
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#blog-navbar"
+                            aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Tunasha</a>
+                </div>
+                <div class="collapse navbar-collapse" id="blog-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/" class="text-uppercase">Home</a></li>
+                        <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
+                        <li><a data-toggle="modal" href="#subscribe-modal" class="text-uppercase">Subscribe</a></li>
+                        <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-        @*<label class="col-xs-2 col-sm-2">Search: </label> @Html.TextBox("searchQuery", ViewBag.CurrentFilter as string, new { @class = "form-control col-xs-6 col-sm-6" })
-        <button type="submit" class="btn btn-danger col-xs-1 col-sm-offset-1 col-sm-1 col-md-2"><i class="glyphicon glyphicon-search"></i></button>*@
-    </div>
-}
-<span class="clearfix"></span>
-<br />
-@foreach (var item in Model)
-{
-    <div class="panel panel-default">
-        @*<div class="panel-heading">
-                <p class="panel-title lead">@Html.ActionLink(item.MiniText, "Details", new { id = item.PostID }) </p>
-            </div>*@
-        <div class="panel-body">
-            <p>@Html.TextFormatter(item.MiniText)</p>
-            @Html.ActionLink("more", "Details", new { id = item.ID })
+    <main>
+        <div class="forum-hero">
+            <div class="forum-hero-overlay">
+                <div class="forum-hero-content">
+                    <div class="container">
+                        <div class="h1 text-center">Our Support Center</div>
+                        <p class="text-center">Have any questions or you want to learn something new?</p>
+
+                        @using (Html.BeginForm("Index", "Forum", FormMethod.Get))
+                        {
+                            <div class="form-group">
+                                <label class="sr-only">Search</label>
+                                @Html.TextBox("searchQuery", ViewBag.CurrentFilter as string, new { @class = "form-control input-lg forum-search-box", placeholder = "Enter a search term here...", type = "search" })
+                            </div>
+                        }
+                        <div class="row hidden-sm hidden-xs">
+                            <div class="center-block">
+                                <div class="col-sm-3">
+                                    <span class="badge" id="contact-phone"><i class="fa fa-phone fa-2x"></i></span>
+                                    <span>Call Us</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span class="badge" id="contact-email"><i class="fa fa-envelope fa-2x"></i></span>
+                                    <span>Email Us</span>
+
+                                </div>
+                                <div class="col-sm-3">
+                                    <span class="badge contact-chat"><i class="fa fa-comments fa-2x"></i></span>
+                                    <span>Chat Support</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="panel-footer panel-success">
-            <p class="text-muted pull-left">@item.Name -- @item.Date</p>
-            @if (Request.IsAuthenticated)
-            {
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "text-danger pull-right" })
-            }
-            <br />
+
+        <div class="forum-questions">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-12 page-header">
+                        <div class="h1">
+                            Questions
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        <ul class="list-group">
+                            @for (int i = 0; i < Model.Count(); i++)
+                            {
+                                <li class="list-group-item">
+                                    <a href="~/Forum/Details/@Model.ElementAt(i).ID">
+                                        <h4 class="list-group-item-heading">
+                                            @Model.ElementAt(i).Name
+                                            <span class="text-muted">@Html.TimeDifference(Model.ElementAt(i).Date)</span>
+                                        </h4>
+                                    </a>
+
+                                    @if (Request.IsAuthenticated)
+                                    {
+                                        <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@Model.ElementAt(i).ID">
+                                            <span class="answer"><i class="fa fa-remove"></i> delete</span>
+                                        </a>
+                                        <span class="clearfix"></span>
+                                    }
+                                    
+
+                                    <p>
+                                        @Html.TextFormatter(Model.ElementAt(i).MiniText)
+                                    </p>
+                                    <span class="clearfix"></span>
+                                </li>
+                            }
+                        </ul>
+
+                        <br />
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
+                        @Model.PageCount
+                        @Html.PagedListPager(Model, page => Url.Action("Index",
+                            new
+                            {
+                                page,
+                                currentFilter = ViewBag.CurrentFilter
+                            }))
+
+                        <p>
+                            can't find what you're looking for ?<br />
+                            Ask us.
+                        </p>
+                    </div>
+                    <div class="col-sm-4 hidden-xs hidden-sm">
+                        <div class="post-caption">
+                            <div class="h3 text-center text-uppercase">It's easy to ask a Question on Tunasha!</div>
+                            <div class="main-content">
+                                <p>Try it Now!</p>
+                                <ul>
+                                    <li>
+                                        <i class="fa fa-check"></i> Do you have any questions/issues you would like to have help with?
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-check"></i> Click on the green icon below, and post your question.
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-check"></i> Our support team will provide an answer within the
+                                        shortest time possible.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
+        <div class="badge contact-chat chat-support">
+            <i class="fa fa-comments fa-3x"></i>
+        </div>
+
+        <div class="panel panel-default chat-support-panel">
+            <div class="panel-heading">
+                <div class="h1 panel-title">Ask your Question</div>
+                <button type="button" class="close chat-close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("Create", "Forum", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form class="form-horizontal" method="post" action="">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Question</label>
+                            <textarea class="form-control" name="question" required></textarea>
+                        </div>
+                        <input class="btn btn-primary text-uppercase" type="submit" value="Submit">
+                    </form>
+                }
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="logo">Tunasha</div>
+                    <p>
+                        At Tunasha, we are on a mission to help our customers with all they need for their electronics
+                        projects. Tools, components, techniques, lessons, we've got it all.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Contact Us</b></p>
+
+                    <div class="address-panel">
+                        <span class="flag nigeria"></span>
+                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong><br>
+                        <p>+234 8060989216 <br />+234 8137755683</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Email: </strong><span id="contact_mail">akinsegun06@yahoo.com</span></p>
+                    <p>&copy;2016 Tunasha. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Social Media</b></p>
+                    <ul class="social-media">
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="twitter"><i class="fa fa-twitter fa-2x"></i></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="facebook"><i class="fa fa-facebook-f fa-2x"></i></div>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+<div class="modal fade" id="delete-comment" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title text-center text-danger">Delete</h2>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Are you sure you want to delete the question</p>
+
+                @using (Html.BeginForm("Delete", "Forum", new { }, FormMethod.Post))
+                {
+                    <input type="hidden" name="id" class="question-id">
+                    <button type="submit" class="btn btn-primary text-uppercase">Delete</button>
+                }
+
+            </div>
+        </div>
     </div>
-}
+</div>
 
-@*<table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Text)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th></th>
-        </tr>
 
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Text)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-            </td>
-        </tr>
-    }
 
-    </table>*@
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/siteScript")
 
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
-@Model.PageCount
-@Html.PagedListPager(Model, page => Url.Action("Index",
-new
-{
-    page,
-    currentFilter =
-        ViewBag.CurrentFilter
-}))
+@*<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>
+        tinymce.init({ selector: 'textarea' });
+</script>*@
+<script type="text/javascript">
+    $('#delete-comment').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('whatever')
+        var modal = $(this)
+        modal.find('.question-id').val(id)
+    })
+</script>
 
-<p>
-    can't find what you're looking for ?<br />
-    @Html.ActionLink("ask us", "Create")
-</p>
+
+
+<div class="modal fade" id="subscribe-modal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title text-center">Newsletter Sign Up</h2>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Sign Up and get awesome articles on electronics projects every two weeks</p>
+
+                <form>
+                    <input class="form-control input-lg" type="email" placeholder="Email Address">
+                    <button type="submit" class="btn btn-primary text-uppercase">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

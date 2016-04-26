@@ -1,0 +1,87 @@
+﻿@model IEnumerable<TunashaProjects.Models.Post>
+@using TunashaProjects.Models;
+@using TunashaProjects.Misc;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-xs-6 col-md-4">
+            <a href="~/Blog/Details/@item.PostID">
+                <div class="thumbnail">
+                    @if (item.Images.Count > 0)
+                    {
+                        <img src="~/Images/Blog/@item.Images.ElementAt(0).FilePath" alt="@item.Images.ElementAt(0).Text">
+                    }
+                    <div class="caption">
+                        <p class="lead">@item.Title</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+
+        @*<div class="panel panel-info">
+                <div class="panel-heading">
+                    <p class="panel-title lead">@Html.ActionLink(item.Title, "Details", new { id = item.PostID }) </p>
+                </div>
+                <div class="panel-body">
+                    <p>@Html.TextFormatter(item.MiniContent)</p>
+                </div>
+                <div class="panel-footer">
+                    <p class="text-muted">@item.PostedBy.Name - @item.Date</p>
+                </div>
+            </div>*@
+    }
+</div>
+
+@*<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserID)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserID)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.PostID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.PostID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.PostID })
+                </td>
+            </tr>
+        }
+
+    </table>*@

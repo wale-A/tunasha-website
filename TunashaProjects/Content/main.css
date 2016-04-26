@@ -1,0 +1,361 @@
+/*Blog Style*/
+.blog{
+    font-family: 'Montserrat', sans-serif;
+}
+.blog .navbar{
+    margin-bottom: 0;
+    background: #fff;
+    border-radius: 0;
+}
+.blog .page-header{
+    margin: 20px 0 20px;
+}
+.blog a:focus, .blog a:active{
+    outline:  none;
+}
+.blog button:focus, .blog button:active{
+    outline: none;
+}
+.blog ul{
+    list-style-type: none;
+}
+.post-box a{
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+.post-box a:hover{
+    color: #3197D6;
+}
+.post-box .panel-heading{
+    height: 100px;
+}
+.post-box .panel-body{
+    background: #f6f6f6;
+}
+.post-box .panel-body:hover{
+    background: transparent;
+}
+.post-box .panel-body:hover .category::before{
+    width: 50px;
+}
+.post-box .panel-body:hover .category::after{
+    width: 50px;
+}
+.blog .modal-body{
+    font-size: 16px;
+}
+.blog .modal-body form{
+    margin: 0 60px;
+}
+.blog .modal-body .btn-primary{
+    margin-top: 10px;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 10px;
+}
+.blog-posts{
+    margin: 40px 0;
+}
+.post-box-1{
+    background-color: #a8e141!important;
+}
+.post-box-2{
+    background: #3498db!important;
+}
+.post-box-3{
+    background: #9b59b6!important;
+}
+.category::before, .category::after{
+    background: #e6e6e6;
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 1px;
+    top: 126px;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+.category::before{
+    right: 235px;
+}
+.category::after{
+    left: 234px;
+}
+.blog-post-hero{
+    width: 100%;
+    height: 160px;
+    margin-bottom: 40px;
+    background-image: url("../Images/computer-hardware.svg");
+    background-repeat: no-repeat;
+    background-size: 940px;
+    background-position: center;
+}
+.blog-post-hero-overlay{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+.post-text p{
+    line-height: 1.6;
+    font-size: 21px;
+    color: rgba(0, 0 , 0, 0.7);
+}
+/*Forum Style*/
+
+.forum{
+    font-family: 'Montserrat', sans-serif;
+}
+.forum .navbar{
+    margin-bottom: 0;
+    background: #fff;
+    border-color: #fff;
+    border-radius: 0;
+}
+.forum a:focus, .forum a:active{
+    outline:  none;
+}
+.forum button:focus, .forum button:active{
+    outline: none;
+}
+.forum ul{
+    list-style-type: none;
+}
+.forum-hero{
+    width: 100%;
+    height: 280px;
+    margin-bottom: 40px;
+    background: url("../Images/forum-hero.jpg") 50% 50% / cover no-repeat;
+}
+.forum-hero-overlay{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+.forum .modal-body{
+    font-size: 16px;
+}
+.forum .modal-body form{
+    margin: 0 60px;
+}
+.forum .modal-body .btn-primary{
+    margin-top: 10px;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 10px;
+}
+.forum-search-box{
+    border-radius: 45px;
+}
+.forum .badge{
+    padding: 11px 17px;
+    border-radius: 45px;
+}
+.forum-questions .list-group-item{
+    border-radius: 0;
+    padding-top: 30px;
+    height: auto;
+    margin-bottom: 40px;
+}
+.forum-questions .list-group{
+    margin-bottom: 40px;
+}
+.forum-questions .page-header{
+    margin: 20px 0 20px;
+}
+.answer{
+    color: #a82400;
+    padding-top: 20px;
+}
+#contact-phone{
+    background: #9b59b6;
+}
+#contact-email{
+    background: #3498db;
+}
+.contact-chat{
+    background: #2ecc71;
+}
+.chat-support{
+    position: fixed;
+    bottom: 1%;
+    right: 3%;
+    z-index: 1000;
+    box-shadow: 2px 2px 10px rgba(10, 10, 10, 0.3);
+}
+.chat-support:hover{
+    cursor: pointer;
+}
+.chat-support-panel{
+    position: fixed;
+    bottom: 0;
+    right: 1%;
+    z-index: 1000;
+    width: 450px;
+    display: none;
+}
+.chat-support-panel .panel-heading .close{
+    line-height: 0;
+}
+.chat-support-panel .panel-body{
+    padding: 20px 40px;
+}
+.chat-support-panel textarea{
+    height: 150px;
+}
+.chat-support-panel .btn-primary{
+    width: 100%;
+    height: 45px;
+}.post-caption{
+     position: absolute;
+     width: 400px;
+     height: auto;
+     background: #fff;
+     border: 1px solid #bec0c2;
+     border-radius: 2px;
+ }
+.post-caption .main-content{
+    padding: 20px;
+}
+.post-caption .h3{
+    background: #3498db;
+    margin: 0;
+    padding: 17px 20px 12px;
+    border-bottom: 1px solid #BEC0C2;
+    color: #fff;
+    font-weight: 900;
+    font-size: 14px;
+}
+.post-caption .fa-check{
+    color: #00cb00;
+}
+.post-caption ul{
+    list-style-type: none;
+    position: relative;
+    left: -35px;
+}
+.post-caption p{
+    font-weight: 700;
+    font-size: 20px;
+}
+.post-caption ul li{
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+.footer {
+    background: #656565;
+    height: auto;
+    padding-top: 40px;
+    color: #d9d9d9;
+    padding-bottom: 30px;
+    margin-top: 50px;
+}
+
+.footer p {
+    font-size: 14px;
+}
+
+.footer b{
+    color: #d9d9d9;
+}
+.footer ul{
+    padding: 0;
+}
+.footer ul li {
+    list-style: none;
+}
+.footer .logo{
+    margin-top: -10px;
+}
+.social-media li a {
+    color: #616161;
+    cursor: pointer;
+}
+
+.social-media li{
+    float: left;
+}
+.social-icon-div {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #f9f9f9;
+    -webkit-transition: all cubic-bezier(0.165, 0.84, 0.44, 1) 1s;
+    transition: all cubic-bezier(0.165, 0.84, 0.44, 1) 1s;
+    margin-left: 10px;
+}
+.flag{
+    display: inline-block;
+    width: 25px;
+    height: 17px;
+    position: absolute;
+    top: 20%;
+    left: 18px;
+    background: url(../Images/flags.png);
+}
+.flag.nigeria{
+    background-position: 0 -17px;
+}
+#twitter {
+    padding: 12px 13px;
+    margin-left: 0;
+}
+
+#facebook {
+    padding: 12px 16px;
+}
+
+#contact_mail{
+    color: #00ff93;
+}
+#twitter:hover {
+    background: #55acee;
+    color: #fff;
+}
+
+#facebook:hover {
+    background: #3b5998;
+    color: #fff;
+}
+.address-panel{
+    padding: 10px 10px 10px 60px;
+    position: relative;
+    border: 1px solid #999;
+    border-radius: 3px;
+    color: #d9d9d9;
+}
+@media screen and (min-width: 400px){
+    .blog-post-hero-content{
+        color: #fff;
+        padding-top: 10px;
+    }
+    .forum-hero-content{
+        color: #fff;
+        padding-top: 10px;
+    }
+}
+@media screen and (min-width: 1170px) {
+    .blog-post-hero-content{
+        color: #fff;
+        padding-top: 40px;
+    }
+    .forum-hero-content{
+         color: #fff;
+         padding-top: 10px;
+     }
+    .post-text > .container{
+        padding-left: 200px;
+        padding-right: 200px;
+    }
+    .forum-search-form{
+        margin: 0 200px;
+    }
+    .forum-hero-content .center-block{
+        margin-top: 30px;
+        margin-left: 260px;
+        margin-right: auto;
+    }
+}

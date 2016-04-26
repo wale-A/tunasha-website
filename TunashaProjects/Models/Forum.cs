@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace TunashaProjects.Models
 {
@@ -15,6 +16,7 @@ namespace TunashaProjects.Models
 
         public int ID { get; set; }
         [Required, Display(Name = "Question")]
+        [UIHint("tinymce_jquery_full"), AllowHtml]
         public string Text { get; set; }
         [Required]
         public string Name { get; set; }
@@ -23,14 +25,23 @@ namespace TunashaProjects.Models
         //[ScaffoldColumn(false)]
         public DateTime Date { get; set; }
 
-        public string MiniText { get { return Text.Substring(0, 200); } }
+        public string MiniText
+        {
+            get
+            {
+                if (Text.Length > 200)
+                    return Text.Substring(0, 200);
+                else return Text.Substring(0, Text.Length);
+            }
+        }
         public virtual ICollection<Reply> Replies { get; set; }
     }
 
     public class Reply
     {
         public int ID { get; set; }
-        [DataType(DataType.MultilineText), Required, Display (Name = "Reply")]
+        [Required, Display (Name = "Reply")]
+        [UIHint("tinymce_jquery_full"), AllowHtml]
         public string Text { get; set; }
         //[Required]
         public string Name { get; set; }
@@ -43,7 +54,7 @@ namespace TunashaProjects.Models
 
     public class QuestionViewModel
     {
-        [DataType(DataType.MultilineText), Required, Display(Name = "Question")]
+        [UIHint("tinymce_jquery_full"), AllowHtml, Required, Display(Name = "Question")]
         public string Text { get; set; }
         [Required, Display(Name = "Full Name")]
         public string Name { get; set; }

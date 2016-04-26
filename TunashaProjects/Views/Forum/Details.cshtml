@@ -2,66 +2,184 @@
 @using TunashaProjects.Misc;
 
 @{
-    ViewBag.Title = "Details";
+    Layout = null;
 }
 
-<h2>Details</h2>
+<!DOCTYPE html>
 
-<div>
-    <h4>Question</h4>
-    <hr />
-        <p>
-            @Html.DisplayFor(model => model.Text)
-        </p>
-        <p>
-            @Html.DisplayFor(model => model.Name)
-            @Html.DisplayFor(model => model.Email)
-            @Html.DisplayFor(model => model.Date)
-        </p>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <title>Forum List</title>
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+</head>
 
-    @foreach (var item in Model.Replies)
-    {
-        <div class="panel panel-default">
-            @*<div class="panel-heading">
-                    <p class="panel-title lead">@Html.ActionLink(item.MiniText, "Details", new { id = item.PostID }) </p>
-                </div>*@
-            <div class="panel-body">
-                <p>@Html.TextFormatter(item.Text)</p>
+
+<body class="forum">
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#blog-navbar"
+                            aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Tunasha</a>
+                </div>
+                <div class="collapse navbar-collapse" id="blog-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/" class="text-uppercase">Home</a></li>
+                        <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
+                        <li><a data-toggle="modal" href="#subscribe-modal" class="text-uppercase">Subscribe</a></li>
+                        <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                    </ul>
+                </div>
             </div>
-            <div class="panel-footer">
-                <p class="text-muted">@item.Name -- @item.Date</p>
-            </div>
+        </nav>
+    </header>
 
+    <main>
+
+        <div class="post-text">
+            <div class="container">
+                <div class="row">
+                    <p>@Html.TextFormatter(Model.Text)</p>
+                </div>
+            </div>
         </div>
-    }
+        <br />
+        <div class="forum-questions">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <ul class="list-group">
+                            @foreach (var item in Model.Replies)
+                            {
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-heading">
+                                        @item.Name
+                                        <span class="text-muted">
+                                            @Html.TimeDifference(item.Date)
+                                        </span>
+                                        @if (Request.IsAuthenticated)
+                                        {
+                                            <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@item.ID">
+                                                <span class="answer"><i class="fa fa-remove"></i> delete</span>
+                                            </a>
+                                        }
+                                    </h4>
 
-    @if (Request.IsAuthenticated){
-        
-        using (Html.BeginForm("AddReply", "Forum", new { questionId = Model.ID }, FormMethod.Post))
-        {
-            @Html.HiddenFor(model => model.ID);
-            @Html.AntiForgeryToken()
-            <div class="form-horizontal">
-                <h4>Reply</h4>
-                <hr />
-                <div class="form-group col-xs-12">
-                    @*<label class="col-sm-2"> Reply :</label>*@
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <textarea name="reply" class="form-control"></textarea>
+                                    <p class="list-group-item-text">
+                                        @item.Text
+                                    </p>
+                                </li>
+                            }
+                        </ul>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-6">
-                        <input type="submit" value="Answer" class="btn btn-default" />
+                @if (Request.IsAuthenticated)
+                {
+
+                    using (Html.BeginForm("AddReply", "Forum", new { questionId = Model.ID }, FormMethod.Post))
+                    {
+                        @Html.HiddenFor(model => model.ID);
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label>Reply</label>
+                        <textarea name="reply" class="form-control" required></textarea>
                     </div>
+                    <input type="submit" value="Submit" class="btn btn-default text-uppercase" />
+                    }
+                }
+                <br />
+                <p>
+                    @Html.ActionLink("Back to List", "Index")
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="logo">Tunasha</div>
+                    <p>
+                        At Tunasha, we are on a mission to help our customers with all they need for their electronics
+                        projects. Tools, components, techniques, lessons, we've got it all.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Contact Us</b></p>
+
+                    <div class="address-panel">
+                        <span class="flag nigeria"></span>
+                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong><br>
+                        <p>+234 8060989216 <br />+234 8137755683</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Email: </strong><span id="contact_mail">akinsegun06@yahoo.com</span></p>
+                    <p>&copy;2016 Tunasha. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Social Media</b></p>
+                    <ul class="social-media">
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="twitter"><i class="fa fa-twitter fa-2x"></i></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="facebook"><i class="fa fa-facebook-f fa-2x"></i></div>
+                            </a>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
-        }
+        </div>
+    </footer>
 
-    }
-    
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/siteScript")
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>
+        tinymce.init({ selector: 'textarea' });
+    </script>
+
+</body>
+
+<div class="modal fade" id="subscribe-modal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title text-center">Newsletter Sign Up</h2>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Sign Up and get awesome articles on electronics projects every two weeks</p>
+
+                <form>
+                    <input class="form-control input-lg" type="email" placeholder="Email Address">
+                    <button type="submit" class="btn btn-primary text-uppercase">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+</html>

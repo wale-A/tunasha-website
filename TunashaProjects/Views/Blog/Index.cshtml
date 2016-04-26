@@ -1,69 +1,168 @@
-﻿@model IEnumerable<TunashaProjects.Models.Post>
-@using TunashaProjects.Models;
+﻿@model PagedList.IPagedList<TunashaProjects.Models.Post>
+@using PagedList.Mvc;
+@using TunashaProjects.Misc;
 
 @{
-    ViewBag.Title = "Index";
+    Layout = null;
 }
 
-<h2>Index</h2>
+<!DOCTYPE html>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <title>Blog List</title>    
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+</head>
 
-@foreach (var item in Model)
+<body class="blog">
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#blog-navbar"
+                            aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Tunasha</a>
+                </div>
+                <div class="collapse navbar-collapse" id="blog-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/" class="text-uppercase">Home</a></li>
+                        <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
+                        <li><a data-toggle="modal" href="#subscribe-modal" class="text-uppercase">Subscribe</a></li>
+                        <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="blog-posts">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="h1 page-header">
+                        Blog Posts
+                    </div>
+                    @if (Request.IsAuthenticated){
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    <div class="col-sm-4">
+                        <div class="panel panel-default post-box">
+                            @if (i % 3 == 0)
+                            {
+                                <div class="panel-heading post-box-3"></div>
+                            }
+                            else if (i % 2 == 0)
+                            {
+                                <div class="panel-heading post-box-2"></div>
+                            }
+                            else if (i % 1 == 0)
+                            {
+                                <div class="panel-heading post-box-1"></div>
+                            }                            
+                            <div class="panel-body">
+                                <p class="text-muted text-center category"><em>@Model.ElementAt(i).Date</em></p>
+
+                                <p class="text-center"><a href="~/Blog/Details/@Model.ElementAt(i).PostID">@Model.ElementAt(i).Title</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    if (i % 3 == 2 && i > 1)
+                    {
+                        <span class="clearfix"></span>
+                    }
+                }
+            </div>
+
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
+            @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+new
 {
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <p class="panel-title lead">@Html.ActionLink(item.Title, "Details", new { id = item.PostID }) </p>
+    page
+}))
+
         </div>
-        <div class="panel-body">
-            <p>@item.MiniContent</p>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="logo">Tunasha</div>
+                    <p>
+                        At Tunasha, we are on a mission to help our customers with all they need for their electronics
+                        projects. Tools, components, techniques, lessons, we've got it all.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Contact Us</b></p>
+
+                    <div class="address-panel">
+                        <span class="flag nigeria"></span>
+                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong><br>
+                        <p>+234 8078657812</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Email: </strong><span id="contact_mail">hello@tunashe.com</span></p>
+                    <p>&copy;2016 Tunasha. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Social Media</b></p>
+                    <ul class="social-media">
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="twitter"><i class="fa fa-twitter fa-2x"></i></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="facebook"><i class="fa fa-facebook-f fa-2x"></i></div>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
         </div>
-        <div class="panel-footer">
-            <p class="text-muted">@item.PostedBy.Name - @item.Date</p>
+    </footer>
+</body>
+
+<div class="modal fade" id="subscribe-modal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title text-center">Newsletter Sign Up</h2>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Sign Up and get awesome articles on electronics projects every two weeks</p>
+                <form>
+                    <input class="form-control input-lg" type="email" placeholder="Email Address">
+                    <button type="submit" class="btn btn-primary text-uppercase">Subscribe</button>
+                </form>
+            </div>
         </div>
     </div>
-}
+</div>
 
-@*<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Content)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserID)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.PostID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.PostID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.PostID })
-            </td>
-        </tr>
-    }
-
-</table>*@
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+</html>

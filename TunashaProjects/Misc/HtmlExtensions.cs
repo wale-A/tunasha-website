@@ -37,5 +37,52 @@ namespace TunashaProjects.Misc
             }
             return MvcHtmlString.Create(newText.ToString());
         }
+
+        public static MvcHtmlString TimeDifference(this HtmlHelper htmlHelper, DateTime dateSent)
+        {
+            StringBuilder newText = new StringBuilder();
+            var date = DateTime.Now - dateSent;
+            if (date.Days > 1) {
+                newText.Append(date.Days.ToString());
+                newText.Append(" days");
+            }
+            else if (date.Days > 0)
+            {
+                newText.Append(date.Days.ToString());
+                newText.Append(" day");
+            }
+            else if (date.Hours > 1)
+            {
+                newText.Append(date.Hours.ToString());
+                newText.Append(" hours");
+            }
+            else if (date.Hours > 0)
+            {
+                newText.Append(date.Hours.ToString());
+                newText.Append(" hour");
+            }
+            else if (date.Minutes > 1)
+            {
+                newText.Append(date.Minutes.ToString());
+                newText.Append(" minutes");
+            }
+            else if (date.Minutes > 0)
+            {
+                newText.Append(date.Minutes.ToString());
+                newText.Append(" minute");
+            }
+            else if (date.Seconds > 1)
+            {
+                newText.Append(date.Seconds.ToString());
+                newText.Append(" seconds");
+            }
+            else if (date.Seconds > 0)
+            {
+                newText.Append(date.Seconds.ToString());
+                newText.Append(" second");
+            }
+            newText.Append(" ago");
+            return MvcHtmlString.Create(newText.ToString());
+        }
     }
 }

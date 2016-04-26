@@ -13,11 +13,13 @@ using PagedList;
 
 namespace TunashaProjects.Controllers
 {
+    [Authorize]
     public class ForumController : Controller
     {
         private DataContext db = new DataContext();
 
         // GET: List of Questions
+        [AllowAnonymous]
         public ActionResult Index(string searchQuery, int? page)
         {
             //searchQuery = searchQuery.ToLower();
@@ -43,6 +45,7 @@ namespace TunashaProjects.Controllers
             return View(listOfQuestions.ToPagedList(pageNumber, pageSize));
         }
 
+        [AllowAnonymous]
         // GET: Forum/Details/5
         public ActionResult Details(int? id)
         {
@@ -59,6 +62,7 @@ namespace TunashaProjects.Controllers
         }
 
         // GET: Forum/Create
+        [AllowAnonymous]
         public ActionResult Create()
         {
             return View();
@@ -67,17 +71,40 @@ namespace TunashaProjects.Controllers
         // POST: Forum/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //[AllowAnonymous]
+        //[HttpPost, ValidateInput(false)]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(QuestionViewModel question)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Question q = new Question()
+        //        {
+        //            Text = question.Text,
+        //            Email = question.Email,
+        //            Name = question.Name,
+        //            Date = DateTime.Now
+        //        };
+        //        db.Questions.Add(q);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    return View(question);
+        //}
+
+        [AllowAnonymous]
+        [HttpPost, ValidateInput(false), ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionViewModel question)
+        public ActionResult CreateQUestion(string name, string email, string question)
         {
             if (ModelState.IsValid)
             {
                 Question q = new Question()
                 {
-                    Text = question.Text,
-                    Email = question.Email,
-                    Name = question.Name,
+                    Text = question,
+                    Email = email,
+                    Name = name,
                     Date = DateTime.Now
                 };
                 db.Questions.Add(q);
@@ -89,35 +116,35 @@ namespace TunashaProjects.Controllers
         }
 
         // GET: Forum/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Question question = db.Questions.Find(id);
-            if (question == null)
-            {
-                return HttpNotFound();
-            }
-            return View(question);
-        }
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Question question = db.Questions.Find(id);
+        //    if (question == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(question);
+        //}
 
-        // POST: Forum/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Text,Name,Email,Date")] Question question)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(question).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(question);
-        }
+        //// POST: Forum/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "ID,Text,Name,Email,Date")] Question question)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(question).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(question);
+        //}
 
         // GET: Forum/Delete/5
         public ActionResult Delete(int? id)
@@ -136,7 +163,6 @@ namespace TunashaProjects.Controllers
 
         // POST: Forum/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Question question = db.Questions.Find(id);
@@ -145,7 +171,6 @@ namespace TunashaProjects.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddReply(string reply, int? questionId)

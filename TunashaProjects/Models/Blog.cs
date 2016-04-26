@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace TunashaProjects.Models
 {
@@ -23,8 +26,10 @@ namespace TunashaProjects.Models
         public DateTime Date { get; set; }
         public bool DisableComment { get; set; }
 
-        [ScaffoldColumn (false)]
-        public string MiniContent { get { return this.Content.Substring(0, 150) + "...."; } }
+        [ScaffoldColumn (false), AllowHtml]
+        //public string MiniContent { get { return this.Content.Substring(0, 150) + "...."; } }
+        public string MiniContent { get { return WebUtility.HtmlDecode(Regex.Replace(this.Content, "<[^>]*(>|$)", string.Empty)).Substring(0, 200); } }
+        
 
         public int UserID { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
@@ -36,7 +41,7 @@ namespace TunashaProjects.Models
     {
         [Required]
         public string Title { get; set; }
-        [Required, DataType(DataType.MultilineText)]
+        [Required, UIHint("tinymce_jquery_full"), AllowHtml]
         public string Content { get; set; }
     }
 
@@ -57,7 +62,7 @@ namespace TunashaProjects.Models
     {
         [Required]
         public string Name { get; set; }
-        [Required, DataType(DataType.MultilineText)]
+        [Required, UIHint("tinymce_jquery_full"), AllowHtml]
         public string Text { get; set; }
     }
 }

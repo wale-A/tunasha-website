@@ -1,0 +1,123 @@
+﻿@model TunashaProjects.Models.Post
+@using TunashaProjects.Misc;
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <h2>@Html.DisplayFor(model => model.Title)</h2>
+
+    <hr />
+    <p>@Html.TextFormatter(Model.Content)</p>
+    <br />
+    <div class="row">
+        @foreach (var image in Model.Images)
+        {
+            <div class="col-sm-4">
+                <div class="thumbnail">
+                    <img class="img-responsive" src="~/Images/Blog/@image.FilePath" alt="@image.Text">
+                    <div class="caption">
+                        <p class="text-muted">@image.Text</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <span class="clearfix"></span>
+    <div class="pull-right">
+        <p class="text-success">
+            @Model.PostedBy.Name - - @Model.Date
+        </p>
+        @if (Request.IsAuthenticated)
+        {
+            @Html.ActionLink("Disable Comments", "DisableCOmments", new { postID = Model.PostID }, new { @class = "btn btn-danger" });
+        }
+    </div>
+    
+</div>
+<span class="clearfix"></span>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Add Comment
+</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+..            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Leave your comment.</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AddComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+    <input type="text" class="form-control" name="name" placeholder="your name" required>
+                    <br />
+    <textarea class="form-control" name="comment" required></textarea>
+                    <br />
+    <button type="submit" class="btn btn-primary">Save changes</button>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<span class="clearfix"></span>
+
+@if (!Model.DisableComment)
+{
+        using (Html.BeginForm("AddComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div id="comment-section" class="form-group col-sm-12">
+                <input type="text" class="form-control" name="name" placeholder="your name" required>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" name="comment" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <div class="">
+                    <button type="submit" > Comment</button>
+                    @*<button type="submit" value="Post" class="btn btn-default" />*@
+                </div>
+            </div>
+        }
+}
+<span class="clearfix"></span>
+@foreach (var comment in Model.Comments)
+{
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <p>@comment.Text</p>
+        </div>
+        <div class="panel-footer">
+            <span class="text-muted">@comment.Name - @comment.Date</span>
+
+            @if (Request.IsAuthenticated)
+            {
+                @Html.ActionLink("delete", "DeleteComment", new { commentID = comment.CommentID, postID = Model.PostID }, new { @class = "text-danger pull-right" });
+            }
+        </div>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PostID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@section Scripts {
+    @Scripts.Render("http://tinymce.cachefly.net/4.0/tinymce.min.js")
+    <script>
+        tinymce.init({ selector: 'textarea' });
+    </script>
+}

@@ -1,0 +1,88 @@
+﻿@model TunashaProjects.Models.PostViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>New Post</h2>
+
+
+@using (Html.BeginForm("Create", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>PostViewModel</h4>*@
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-12">
+                <textarea name="Content" class="form-control"></textarea>
+                @*@Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <p>Add pictures :</p>
+            <div class="upload-container col-sm-10 col-sm-offset-2">
+                <div class="upload">
+                    <div class="image">
+                        <div class="form-inline">
+                            <input type="file" accept="image/*" name="files" id="file1" class="form-control" />
+                            <img src="@Url.Content("~/Images/delete.png")" alt="Remove picture" />
+                        </div>
+                        @*add a small space btw these two*@
+                        <input type="text" class="form-control" name="imgText" placeholder="image text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Post" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    @*@Scripts.Render("http://tinymce.cachefly.net/4.0/tinymce.min.js")*@
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>
+        tinymce.init({ selector: 'textarea' });
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var currentImage = 1;
+            $("body").on("change", "input[name='files']", function () {
+                var pathToRemoveIcon = "@Url.Content("~/Images/delete.png")";
+                currentImage += 1;
+                var htmlToAppend = '<br/><div class="upload"><div class="image"><div class="form-inline"><input type="file" accept="image/*" name="files" id= "file' + currentImage + '" class="form-control" /> <img src="@Url.Content("~/Images/delete.png")" alt="Remove picture" /></div><input type="text" class="form-control" name="imgText" id="imgText" placeholder="image text"></div> </div>';
+                $('.upload-container').append(htmlToAppend);
+            }).on("click", ".upload img", function () {
+                if ($(this).parent().parent().parent().siblings.length > 0) {
+                    $(this).parent().parent().parent().remove();
+                }
+            });
+        });
+    </script>
+}

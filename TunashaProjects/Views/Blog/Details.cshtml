@@ -1,77 +1,235 @@
 ﻿@model TunashaProjects.Models.Post
 @using TunashaProjects.Misc;
 
+
 @{
-    ViewBag.Title = "Details";
+    Layout = null;
 }
 
-<div>
-    <h2>@Html.DisplayFor(model => model.Title)</h2>
+<!DOCTYPE html>
 
-    <hr />
-    <p>@Html.TextFormatter(Model.Content)</p>
-    <br />
-    <div class="row">
-        @foreach (var image in Model.Images)
-        {
-            <div class="col-sm-6">
-                <div class="thumbnail">
-                    @Html.ImageFormatter(image)
-                    <div class="caption">
-                        <p class="text-muted">@image.Text</p>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <title>Blog Post</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+
+<body class="blog">
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#blog-navbar"
+                            aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Tunasha</a>
+                </div>
+                <div class="collapse navbar-collapse" id="blog-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/" class="text-uppercase">Home</a></li>
+                        <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class="text-uppercase" })</li>
+                        <li><a data-toggle="modal" href="#subscribe-modal" class="text-uppercase">Subscribe</a></li>
+                        <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-post-hero">
+            <div class="blog-post-hero-overlay">
+                <div class="blog-post-hero-content">
+                    <div class="h1 text-center">@Model.Title</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-text">
+            <div class="container">
+                <div class="row">
+                    <p>@Html.TextFormatter(Model.Content)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="forum-questions">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 page-header">
+                        <div class="h1">
+                            Comments
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <ul class="list-group">
+                            @foreach (var item in Model.Comments)
+                            {
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-heading">
+                                        @item.Name
+                                        <span class="text-muted">
+                                            @Html.TimeDifference(item.Date)
+                                        </span>
+                                            @if (Request.IsAuthenticated)
+                                            {
+                                                <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@item.CommentID">
+                                                    <span class="answer"><i class="fa fa-remove"></i> delete</span>
+                                                </a>
+                                            }
+                                    </h4>
+                                    
+                                    <p class="list-group-item-text">
+                                        @item.Text
+                                    </p>
+                                </li>
+                            }
+                        </ul>
                     </div>
                 </div>
             </div>
-        }
-    </div>
-    <br />
-    <p class="text-success   pull-right">@Model.PostedBy.Name - - @Model.Date</p>
-</div>
+        </div>
 
-<br />
+        <div class="badge contact-chat chat-support">
+            <i class="fa fa-comments fa-3x"></i>
+        </div>
 
-@if (!Model.DisableComment)
-{
-    <div>
-        @*//Html.Hidden("postID", Model.PostID);
-            //Html.RenderPartial("_AddComment");*@
-        @using (Html.BeginForm("AddComment", "Posts", new { postID = Model.PostID }, FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-
-            <div id="comment-section" class="form-group col-sm-12">
-                <input type="text" class="form-control" name="name" placeholder="your name" required> <br />
-                <textarea class="form-control" width="100%" name="comment" placeholder="your comment" required></textarea>
+        <div class="panel panel-default chat-support-panel">
+            <div class="panel-heading">
+                <div class="h1 panel-title">Post a Comment</div>
+                <button type="button" class="close chat-close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("AddComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
+                            {
+                    @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Comment</label>
+                    <textarea class="form-control" name="comment" required></textarea>
+                </div>
+                <input class="btn btn-primary text-uppercase" type="submit" value="Submit">
+                            }
+            </div>
+        </div>
+    </main>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Add Comment" class="btn btn-info" />
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="logo">Tunasha</div>
+                    <p>
+                        At Tunasha, we are on a mission to help our customers with all they need for their electronics
+                        projects. Tools, components, techniques, lessons, we've got it all.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Contact Us</b></p>
+
+                    <div class="address-panel">
+                        <span class="flag nigeria"></span>
+                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong><br>
+                        <p>+234 8060989216<br /> +234 8137755683</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Email: </strong><span id="contact_mail"> akinsegun06@yahoo.com</span></p>
+                    <p>&copy;2016 Tunasha. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-3">
+                    <p><b>Social Media</b></p>
+                    <ul class="social-media">
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="twitter"><i class="fa fa-twitter fa-2x"></i></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="facebook"><i class="fa fa-facebook-f fa-2x"></i></div>
+                            </a>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
-        }
-    </div>
-}
-<br />
-<br />
-@foreach (var comment in Model.Comments)
-{
-    <div class="panel panel-info">
-        <div class="panel-body">
-            <p>@comment.Text</p>
         </div>
-        <div class="panel-footer">
-            <span class="text-muted">@comment.Name - @comment.Date</span>
+    </footer>
 
-            @if (Request.IsAuthenticated)
-            {
-                @Html.ActionLink("delete", "DeleteComment", new { commentID = comment.CommentID, postID = Model.PostID }, new { @class = "text-danger pull-right" });
-            }
+    <div class="modal fade" id="delete-comment" aria-hidden="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h2 class="modal-title text-center text-danger">Delete</h2>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Are you sure you want to delete the comment</p>
+
+                                        @using (Html.BeginForm("DeleteComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
+                    {
+                                            <input type="hidden" name="commentID" class="comment-id">
+                    <button type="submit" class="btn btn-primary text-uppercase">Delete</button>
+                    }
+
+                </div>
+            </div>
         </div>
     </div>
-}
 
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.PostID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/siteScript")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $('#delete-comment').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('whatever')
+        var modal = $(this)
+        modal.find('.comment-id').val(id)
+    })
+    </script>
+
+</body>
+
+<div class="modal fade" id="subscribe-modal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title text-center">Newsletter Sign Up</h2>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Sign Up and get awesome articles on electronics projects every two weeks</p>
+
+                <form>
+                    <input class="form-control input-lg" type="email" placeholder="Email Address">
+                    <button type="submit" class="btn btn-primary text-uppercase">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

@@ -1,0 +1,106 @@
+﻿@model PagedList.IPagedList<TunashaProjects.Models.Question>
+@using PagedList.Mvc;
+@using TunashaProjects.Misc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Forum";
+}
+
+<h2>Forum</h2>
+
+<p>
+    @Html.ActionLink("New Question", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "Forum", FormMethod.Get, new { @class = "form-inline" }))
+{
+    <div class="form-horizontal">
+        <span class="">Search</span> 
+        @Html.TextBox("searchQuery", ViewBag.CurrentFilter as string, new { @class = "form-control" })
+        <button type="submit" class="btn btn-danger"> <i class="glyphicon glyphicon-search"></i> </button>
+
+        @*<label class="col-xs-2 col-sm-2">Search: </label> @Html.TextBox("searchQuery", ViewBag.CurrentFilter as string, new { @class = "form-control col-xs-6 col-sm-6" })
+        <button type="submit" class="btn btn-danger col-xs-1 col-sm-offset-1 col-sm-1 col-md-2"><i class="glyphicon glyphicon-search"></i></button>*@
+    </div>
+}
+<span class="clearfix"></span>
+<br />
+@foreach (var item in Model)
+{
+    <div class="panel panel-default">
+        @*<div class="panel-heading">
+                <p class="panel-title lead">@Html.ActionLink(item.MiniText, "Details", new { id = item.PostID }) </p>
+            </div>*@
+        <div class="panel-body">
+            <p>@Html.TextFormatter(item.MiniText)</p>
+            @Html.ActionLink("more", "Details", new { id = item.ID })
+        </div>
+        <div class="panel-footer panel-success">
+            <p class="text-muted pull-left">@item.Name -- @item.Date</p>
+            @if (Request.IsAuthenticated)
+            {
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "text-danger pull-right" })
+            }
+            <br />
+        </div>
+
+    </div>
+}
+
+@*<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            </td>
+        </tr>
+    }
+
+    </table>*@
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
+@Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+new
+{
+    page,
+    currentFilter =
+        ViewBag.CurrentFilter
+}))
+
+<p>
+    can't find what you're looking for ?<br />
+    @Html.ActionLink("ask us", "Create")
+</p>

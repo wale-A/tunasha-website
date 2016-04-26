@@ -23,9 +23,14 @@ namespace TunashaProjects
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/siteScript").Include(
+                      "~/Scripts/main.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/bootstrap.min.css",
+                     /* "~/Content/site.css"*/
+                      "~/Content/main.css",
+                      "~/Content/font-awesome.min.css"));
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using TunashaProjects.DAL;
 using TunashaProjects.Models;
+using PagedList;
 
 namespace TunashaProjects.Controllers
 {
@@ -19,9 +20,12 @@ namespace TunashaProjects.Controllers
 
         // GET: Posts
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(db.Posts.Include(x => x.PostedBy).ToList());
+            int pageSize = 12;
+            int pageNumber = (page ?? 1);
+            var posts = db.Posts.Include(x => x.PostedBy).ToList();
+            return View(posts.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Posts/Details/5
@@ -32,7 +36,7 @@ namespace TunashaProjects.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = db.Posts.Include(p => p.Images).SingleOrDefault(p => p.PostID == id);
+            Post post = db.Posts.Include(p => p.Images).Include(p => p.Comments).SingleOrDefault(p => p.PostID == id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -50,7 +54,8 @@ namespace TunashaProjects.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 
-        [HttpPost]
+        //[HttpPost, ValidateInput(false)]
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult Create(PostViewModel post, ICollection<HttpPostedFileBase> files, ICollection<string> imgText)
         {
@@ -77,10 +82,10 @@ namespace TunashaProjects.Controllers
                         {
                             Text = imgText.ElementAt(i),
                             DateAdded = DateTime.Now,
-                            FilePath = Path.Combine(Server.MapPath("~/Images/Blog"), Guid.NewGuid().ToString() + "_" + imgName)
+                            FilePath = Guid.NewGuid().ToString() + "_" + imgName
                             //FilePath = Path.Combine(@"~\Images\Blog", Guid.NewGuid().ToString() + "_" + imgName)
                         };
-                        img.SaveAs(file.FilePath);
+                        img.SaveAs(Server.MapPath("~/Images/Blog/" + file.FilePath));
                         db.Files.Add(file);
                         p.Images.Add(file);
                     }
@@ -95,35 +100,35 @@ namespace TunashaProjects.Controllers
         }
 
         // GET: Posts/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Post post = db.Posts.Find(id);
-            if (post == null)
-            {
-                return HttpNotFound();
-            }
-            return View(post);
-        }
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Post post = db.Posts.Find(id);
+        //    if (post == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(post);
+        //}
 
-        // POST: Posts/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PostID,Title,Content,Date,UserID")] Post post)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(post).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(post);
-        }
+        //// POST: Posts/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "PostID,Title,Content,Date,UserID")] Post post)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(post).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(post);
+        //}
 
         // GET: Posts/Delete/5
         public ActionResult Delete(int? id)
@@ -195,7 +200,16 @@ namespace TunashaProjects.Controllers
             return RedirectToAction("Details", new { id = postID });
         }
 
-        public ActionResult DeleteComment(int commentID, int postID)
+        //public ActionResult DeleteComment(int commentID, int postID)
+        //{
+        //    var comment = db.Comments.Find(commentID);
+        //    db.Entry(comment).State = EntityState.Deleted;
+        //    db.SaveChanges();
+        //    return RedirectToAction("Details", new { id = postID });
+        //}
+
+        [HttpPost]
+        public ActionResult DeleteComment(int? commentID, int postID)
         {
             var comment = db.Comments.Find(commentID);
             db.Entry(comment).State = EntityState.Deleted;
