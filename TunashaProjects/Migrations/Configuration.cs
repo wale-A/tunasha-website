@@ -27,13 +27,19 @@ namespace TunashaProjects.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            context.Roles.AddOrUpdate(
+                p => p.RoleName,
+                new Role { RoleName = "User" },
+                new Role { RoleName = "Admin" });
+
             context.Users.AddOrUpdate(
                 p => p.Name,
                 new User
                 {
                     Name = "admin",
                     Email = "admin@123.co.uk",
-                    Password = "admin123"
+                    Password = "admin123",
+                    RoleID = 2
                 });
         }
     }

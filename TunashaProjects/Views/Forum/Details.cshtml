@@ -9,9 +9,9 @@
 
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0" />
     <meta charset="UTF-8">
-    <title>Forum List</title>
+    <title>Forum</title>
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -46,11 +46,17 @@
     </header>
 
     <main>
-
         <div class="post-text">
             <div class="container">
                 <div class="row">
-                    <p>@Html.TextFormatter(Model.Text)</p>
+                    <div class="col-sm-12">
+                        <hr />
+                        <p>
+                            @Html.TextFormatter(Model.Text)
+                            <small>-- @Model.Name  </small>
+                            <small>@Model.Date.ToShortDateString()</small>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,17 +71,17 @@
                                 <li class="list-group-item">
                                     <h4 class="list-group-item-heading">
                                         @item.Name
-                                        <span class="text-muted">
-                                            @Html.TimeDifference(item.Date)
-                                        </span>
+                                        <small class="text-muted">
+                                            @*@Html.TimeDifference(item.Date)*@
+                                            @Model.Date.ToShortDateString()
+                                        </small>
                                         @if (Request.IsAuthenticated)
                                         {
                                             <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@item.ID">
-                                                <span class="answer"><i class="fa fa-remove"></i> delete</span>
+                                                <small class="answer"><i class="fa fa-remove"></i> delete</small>
                                             </a>
                                         }
                                     </h4>
-
                                     <p class="list-group-item-text">
                                         @item.Text
                                     </p>
@@ -87,16 +93,15 @@
 
                 @if (Request.IsAuthenticated)
                 {
-
                     using (Html.BeginForm("AddReply", "Forum", new { questionId = Model.ID }, FormMethod.Post))
                     {
-                        @Html.HiddenFor(model => model.ID);
+                        @*@Html.HiddenFor(model => model.ID);*@
                     @Html.AntiForgeryToken()
-                    <div class="form-group">
-                        <label>Reply</label>
-                        <textarea name="reply" class="form-control" required></textarea>
-                    </div>
-                    <input type="submit" value="Submit" class="btn btn-default text-uppercase" />
+                        <div class="form-group">
+                            <label>Reply</label>
+                            <textarea name="reply" class="form-control" required></textarea>
+                        </div>
+                        <input type="submit" value="Reply" class="btn btn-info" />
                     }
                 }
                 <br />

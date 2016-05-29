@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TunashaProjects.Models
 {
@@ -55,7 +56,9 @@ namespace TunashaProjects.Models
         public string Name { get; set; }
         public DateTime Date { get; set; }
 
+        [Required]
         public int PostID { get; set; }
+        public virtual Post BlogPost { get; set; }
     }
 
     public class CommentViewModel

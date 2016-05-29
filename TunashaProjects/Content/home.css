@@ -1,0 +1,112 @@
+.tunashe {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.home .navbar {
+    border-radius: 0;
+}
+
+.home .navbar-nav > li > a {
+    opacity: 0.7;
+}
+
+.home .navbar-nav > li a:hover {
+    background: transparent;
+    opacity: 1;
+}
+
+.home .footer {
+    margin-top: 0;
+}
+
+.tunashe a {
+    cursor: pointer;
+}
+
+.tunashe .btn {
+    border-radius: 3px;
+}
+
+.tunashe input, .tunashe select, .tunashe textarea {
+    border-radius: 3px;
+}
+
+.hero-overlay {
+    height: 100%;
+    max-height: 800px;
+    background-color: #0e1c2c;
+    background: radial-gradient(circle farthest-corner at right bottom, #0971ce 0%, #0862a5 28%, #10283f 79%, #0e1c2c 100%);
+}
+
+.hero {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    position: relative;
+    top: -450px;
+    font-size: 1.1rem;
+    overflow: hidden;
+    color: #fff;
+    height: 100%;
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.hero .fa-chevron-down {
+    font-size: 70px;
+    margin-top: 120px;
+    font-weight: 300;
+}
+
+.hero .container {
+    position: relative;
+    height: 100%;
+}
+
+.hero-content {
+    position: relative;
+    bottom: 0;
+    z-index: 2;
+}
+
+.sections {
+    padding: 72px 0;
+}
+
+.sections h1 {
+    color: #5bc0de;
+}
+
+.read-more-link {
+    color: #BBBBBB;
+}
+
+.read-more-link:hover {
+    text-decoration: none;
+}
+
+.home .carousel {
+    top: -20px;
+}
+
+.store-section {
+    background: #f7f7f7;
+}
+
+.forum-section {
+    background: url("../img/home_hero1.jpg") no-repeat fixed center center / cover;
+    height: 450px;
+}
+
+.forum-section h4 {
+    color: #fff;
+    line-height: 1.4;
+}
+
+.blog-section {
+    background: url("../img/blog-section-hero.jpg") no-repeat center center /cover;
+}
+
+.icons .sections {
+    padding-top: 10px;
+}

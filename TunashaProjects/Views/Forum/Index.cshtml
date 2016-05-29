@@ -12,7 +12,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta charset="UTF-8">
-    <title>Forum List</title>
+    <title>Forum</title>
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -100,7 +100,8 @@
                                     <a href="~/Forum/Details/@Model.ElementAt(i).ID">
                                         <h4 class="list-group-item-heading">
                                             @Model.ElementAt(i).Name
-                                            <span class="text-muted">@Html.TimeDifference(Model.ElementAt(i).Date)</span>
+                                            @*<span class="text-muted">@Html.TimeDifference(Model.ElementAt(i).Date)</span>*@
+                                            <span class="text-muted">@Model.ElementAt(i).Date.ToShortDateString().ToLowerInvariant()</span>
                                         </h4>
                                     </a>
 
@@ -110,9 +111,7 @@
                                             <span class="answer"><i class="fa fa-remove"></i> delete</span>
                                         </a>
                                         <span class="clearfix"></span>
-                                    }
-                                    
-
+                                    }                                   
                                     <p>
                                         @Html.TextFormatter(Model.ElementAt(i).MiniText)
                                     </p>
@@ -195,7 +194,7 @@
             </div>
         </div>
     </main>
-
+    <span class="clearfix"></span>
     <footer class="footer">
         <div class="container">
             <div class="row">

@@ -1,7 +1,5 @@
 ﻿@model TunashaProjects.Models.Post
 @using TunashaProjects.Misc;
-
-
 @{
     Layout = null;
 }
@@ -58,7 +56,9 @@
         <div class="post-text">
             <div class="container">
                 <div class="row">
-                    <p>@Html.TextFormatter(Model.Content)</p>
+                    <div class="col-sm-12">
+                        <p>@Html.TextFormatter(Model.Content)</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12 page-header">
-                        <div class="h1">
+                        <div class="h2">
                             Comments
                         </div>
                     </div>
@@ -79,16 +79,17 @@
                                     <h4 class="list-group-item-heading">
                                         @item.Name
                                         <span class="text-muted">
-                                            @Html.TimeDifference(item.Date)
+                                            @item.Date.ToShortDateString()
+                                            @*@Html.TimeDifference(item.Date)*@
                                         </span>
-                                            @if (Request.IsAuthenticated)
-                                            {
-                                                <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@item.CommentID">
-                                                    <span class="answer"><i class="fa fa-remove"></i> delete</span>
-                                                </a>
-                                            }
+                                        @if (Request.IsAuthenticated)
+                                        {
+                                            <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@item.CommentID">
+                                                <span class="answer"><i class="fa fa-remove"></i> delete</span>
+                                            </a>
+                                        }
                                     </h4>
-                                    
+
                                     <p class="list-group-item-text">
                                         @item.Text
                                     </p>
@@ -100,33 +101,36 @@
             </div>
         </div>
 
-        <div class="badge contact-chat chat-support">
-            <i class="fa fa-comments fa-3x"></i>
-        </div>
+        @if (!Model.DisableComment)
+        {
+            <div class="badge contact-chat chat-support">
+                <i class="fa fa-comments fa-3x"></i>
+            </div>
 
-        <div class="panel panel-default chat-support-panel">
-            <div class="panel-heading">
-                <div class="h1 panel-title">Post a Comment</div>
-                <button type="button" class="close chat-close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="panel-body">
-                @using (Html.BeginForm("AddComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
-                            {
-                    @Html.AntiForgeryToken()
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" name="name" required>
+            <div class="panel panel-default chat-support-panel">
+                <div class="panel-heading">
+                    <div class="h1 panel-title">Post a Comment</div>
+                    <button type="button" class="close chat-close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label>Comment</label>
-                    <textarea class="form-control" name="comment" required></textarea>
+                <div class="panel-body">
+                    @using (Html.BeginForm("AddComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Comment</label>
+                            <textarea class="form-control" name="comment" required></textarea>
+                        </div>
+                        <input class="btn btn-primary text-uppercase" type="submit" value="Submit">
+                    }
                 </div>
-                <input class="btn btn-primary text-uppercase" type="submit" value="Submit">
-                            }
             </div>
-        </div>
+        }
     </main>
 
     <footer class="footer">
@@ -184,10 +188,10 @@
                 <div class="modal-body">
                     <p class="text-center">Are you sure you want to delete the comment</p>
 
-                                        @using (Html.BeginForm("DeleteComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
+                    @using (Html.BeginForm("DeleteComment", "Blog", new { postID = Model.PostID }, FormMethod.Post))
                     {
-                                            <input type="hidden" name="commentID" class="comment-id">
-                    <button type="submit" class="btn btn-primary text-uppercase">Delete</button>
+                        <input type="hidden" name="commentID" class="comment-id">
+                        <button type="submit" class="btn btn-primary text-uppercase">Delete</button>
                     }
 
                 </div>
@@ -202,11 +206,11 @@
 
     <script type="text/javascript">
         $('#delete-comment').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('whatever')
-        var modal = $(this)
-        modal.find('.comment-id').val(id)
-    })
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var id = button.data('whatever')
+            var modal = $(this)
+            modal.find('.comment-id').val(id)
+        })
     </script>
 
 </body>

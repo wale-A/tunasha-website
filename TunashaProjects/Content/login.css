@@ -1,0 +1,77 @@
+.login-page {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-logo {
+    color: #333;
+}
+
+.login-logo:hover, .login-logo:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.inner-addon {
+    position: relative;
+}
+
+.inner-addon .icon {
+    position: absolute;
+    padding: 3px 10px 10px 10px;
+    pointer-events: none;
+    font-size: 2rem;
+}
+
+.left-addon .icon {
+    left: 0;
+}
+
+.left-addon input {
+    padding-left: 30px
+}
+
+.login-page, .signup-page {
+    height: 100%;
+    width: 100%;
+    background: #EAEAEA;
+    padding-top: 50px !important;
+}
+
+.login-card {
+    background: #fff;
+    height: auto;
+    width: auto;
+    padding: 28px 29px;
+    border: 1px solid #E0E2E4;
+    border-radius: 3px;
+    box-shadow: rgba(224, 226, 228, 0.2) 0 0 5px;
+}
+
+.login-btn {
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+
+.login-form .inner-addon .icon {
+    padding-top: 9px;
+}
+
+.login-form .form-control {
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+
+.login-form .checkbox {
+    padding-top: 0 !important;
+}
+
+.login-form a:hover {
+    text-decoration: none;
+}
+
+@media screen and (min-width: 1170px) {
+    .login-page .center-block {
+        margin-left: 350px;
+        margin-right: 350px;
+    }
+}

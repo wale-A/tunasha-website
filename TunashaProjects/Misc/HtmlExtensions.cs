@@ -41,7 +41,7 @@ namespace TunashaProjects.Misc
         public static MvcHtmlString TimeDifference(this HtmlHelper htmlHelper, DateTime dateSent)
         {
             StringBuilder newText = new StringBuilder();
-            var date = DateTime.Now - dateSent;
+            var date = DateTime.Now.ToUniversalTime() - dateSent.ToUniversalTime();
             if (date.Days > 1) {
                 newText.Append(date.Days.ToString());
                 newText.Append(" days");
@@ -83,6 +83,14 @@ namespace TunashaProjects.Misc
             }
             newText.Append(" ago");
             return MvcHtmlString.Create(newText.ToString());
+        }
+
+        public static MvcHtmlString CommentState(this HtmlHelper htmlHelper, bool commentState)
+        {
+            StringBuilder newText = new StringBuilder();
+            if (commentState)
+                return MvcHtmlString.Create("enable comments");
+            return MvcHtmlString.Create("disable comments");
         }
     }
 }

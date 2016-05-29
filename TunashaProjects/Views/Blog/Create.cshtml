@@ -47,7 +47,7 @@
             New Post
         </div>
 
-        @using (Html.BeginForm("Create", "Blog", new { enctype = "multipart/form-data" }, FormMethod.Post, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm("Create", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
@@ -68,28 +68,29 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <p>Add pictures :</p>
-                <div class="upload-container col-sm-10 col-sm-offset-2">
+            @*<div class="form-group">
+                <label>Add pictures :</label>
+                <span class="clearfix"></span>
+                <div class="upload-container col-sm-5 col-sm-offset-2">
                     <div class="upload">
                         <div class="image">
-                            <div class="form-inline">
+                            <div class="form-horizontal">
                                 <input type="file" accept="image/*" name="files" id="file1" class="form-control" />
                                 <img src="@Url.Content("~/Images/delete.png")" alt="Remove picture" />
                             </div>
                             <input type="text" class="form-control" name="imgText" placeholder="image text">
                         </div>
                     </div>
+                    <span class="clearfix"></span>
                 </div>
-            </div>
-
+            </div>*@
+                <span class="clearfix"></span>
             <div class="form-group">
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <input type="submit" value="Post" class="btn btn-info" />
                 </div>
             </div>
         }
-
         <p>
             @Html.ActionLink("Back to List", "Index")
         </p>
@@ -145,12 +146,6 @@
 @Scripts.Render("~/bundles/siteScript")
 @Scripts.Render("~/bundles/jqueryval")
 
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-<script>
-    tinymce.init({ selector: 'textarea' });
-</script>
-
-
 <script type="text/javascript">
     $(document).ready(function () {
         var currentImage = 1;
@@ -167,5 +162,9 @@
     });
 </script>
 
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>
+    tinymce.init({ selector: 'textarea' });
+</script>
 
 </html>

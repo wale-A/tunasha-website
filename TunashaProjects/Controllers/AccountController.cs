@@ -19,6 +19,9 @@ namespace TunashaProjects.Controllers
         // GET: Account
         //public ActionResult Index()
         //{
+        //    var x = Guid.NewGuid();
+        //    Guid g = new Guid();
+        //    var cc = g.ToString();
         //    return View(db.User.ToList());
         //}
 

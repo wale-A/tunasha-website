@@ -68,8 +68,12 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Abstractions" />
-    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -131,6 +135,8 @@
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="DAL\DataContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -160,10 +166,27 @@
     <Compile Include="Migrations\201604192310022_changeInProduct.Designer.cs">
       <DependentUpon>201604192310022_changeInProduct.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605230620473_cascadeDelete.cs" />
+    <Compile Include="Migrations\201605230620473_cascadeDelete.Designer.cs">
+      <DependentUpon>201605230620473_cascadeDelete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605281928428_removalOfSale.cs" />
+    <Compile Include="Migrations\201605281928428_removalOfSale.Designer.cs">
+      <DependentUpon>201605281928428_removalOfSale.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605282127453_store.cs" />
+    <Compile Include="Migrations\201605282127453_store.Designer.cs">
+      <DependentUpon>201605282127453_store.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605282306516_store_Order.cs" />
+    <Compile Include="Migrations\201605282306516_store_Order.Designer.cs">
+      <DependentUpon>201605282306516_store_Order.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Misc\Enums.cs" />
     <Compile Include="Misc\HtmlExtensions.cs" />
     <Compile Include="Misc\MyExtensionMethods.cs" />
+    <Compile Include="Misc\MyRoleProvider.cs" />
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\Forum.cs" />
@@ -172,10 +195,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\home.css" />
+    <Content Include="Content\login.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
@@ -183,11 +209,19 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\blog-section-hero.jpg" />
     <Content Include="Images\computer-hardware.svg" />
     <Content Include="Images\delete.png" />
     <Content Include="Images\delete%281%29.png" />
+    <Content Include="Images\electronic_circuit.jpg" />
     <Content Include="Images\flags.png" />
     <Content Include="Images\forum-hero.jpg" />
+    <Content Include="Images\home_hero1.jpg" />
+    <Content Include="Images\home_hero2.jpg" />
+    <Content Include="Images\home_hero3.jpg" />
+    <Content Include="Images\interact.png" />
+    <Content Include="Images\learn.png" />
+    <Content Include="Images\shop.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
@@ -463,7 +497,9 @@
     <Content Include="Scripts\tinymce\utils\mctabs.js" />
     <Content Include="Scripts\tinymce\utils\validate.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -480,7 +516,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Blog\Delete.cshtml" />
     <Content Include="Views\Blog\Detailss.cshtml" />
-    <Content Include="Views\Blog\Edit.cshtml" />
+    <Content Include="Views\Blog\Editt.cshtml" />
     <Content Include="Views\Blog\Indexx.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Blog\Createe.cshtml" />
@@ -500,11 +536,14 @@
     <Content Include="Views\Blog\Details.cshtml" />
     <Content Include="Views\Blog\Create.cshtml" />
     <Content Include="Views\Forum\Index.cshtml" />
+    <Content Include="Views\Blog\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Blog\" />
     <Folder Include="Images\Posts\" />
+    <Folder Include="Views\Orders\" />
+    <Folder Include="Views\Products\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -531,6 +570,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604192310022_changeInProduct.resx">
       <DependentUpon>201604192310022_changeInProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605230620473_cascadeDelete.resx">
+      <DependentUpon>201605230620473_cascadeDelete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605281928428_removalOfSale.resx">
+      <DependentUpon>201605281928428_removalOfSale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605282127453_store.resx">
+      <DependentUpon>201605282127453_store.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605282306516_store_Order.resx">
+      <DependentUpon>201605282306516_store_Order.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

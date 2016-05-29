@@ -12,7 +12,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta charset="UTF-8">
-    <title>Blog List</title>    
+    <title>Blog Posts</title>
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -51,10 +51,11 @@
                     <div class="h1 page-header">
                         Blog Posts
                     </div>
-                    @if (Request.IsAuthenticated){
-                    <p>
-                        @Html.ActionLink("Create New", "Create")
-                    </p>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <p>
+                            @Html.ActionLink("Create New", "Create")
+                        </p>
                     }
                 </div>
             </div>
@@ -74,11 +75,31 @@
                             else if (i % 1 == 0)
                             {
                                 <div class="panel-heading post-box-1"></div>
-                            }                            
+                            }
                             <div class="panel-body">
-                                <p class="text-muted text-center category"><em>@Model.ElementAt(i).Date</em></p>
+                                <p class="text-muted text-center category"><em>@Model.ElementAt(i).Date.ToShortDateString()</em></p>
 
                                 <p class="text-center"><a href="~/Blog/Details/@Model.ElementAt(i).PostID">@Model.ElementAt(i).Title</a></p>
+                                @if (Request.IsAuthenticated)
+                                {
+                                    <div class="text-center">
+                                        <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@Model.ElementAt(i).PostID">
+                                            <span class="answer"><i class="fa fa-remove"></i> delete</span>
+                                        </a>
+
+                                        
+                                            <a href="~/Blog/Comment/@Model.ElementAt(i).PostID">
+                                                <span class="text-danger">@Html.CommentState(Model.ElementAt(i).DisableComment)</span>
+                                            </a>
+
+                                        <a href="~/Blog/Edit/@Model.ElementAt(i).PostID" class="pull-left">
+                                            <span class="answer">
+                                                <i class="fa fa-edit"></i> edit
+                                            </span>
+                                        </a>
+                                    </div>
+                                }
+                                <p></p>
                             </div>
                         </div>
                     </div>
@@ -143,6 +164,43 @@ new
     </footer>
 </body>
 
+<div class="modal fade" id="delete-comment" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title text-center text-danger">Delete</h2>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Are you sure you want to delete the question</p>
+
+                @using (Html.BeginForm("Delete", "Blog", new { }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" class="question-id">
+                    <button type="submit" class="btn btn-primary text-uppercase">Delete</button>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/siteScript")
+
+<script type="text/javascript">
+    $('#delete-comment').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('whatever')
+        var modal = $(this)
+        modal.find('.question-id').val(id)
+    })
+</script>
+
 <div class="modal fade" id="subscribe-modal" aria-hidden="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -163,6 +221,4 @@ new
     </div>
 </div>
 
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
 </html>
