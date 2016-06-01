@@ -1,59 +1,160 @@
 ﻿@model TunashaProjects.Models.ProductViewModel
 
 @{
-    ViewBag.Title = "Create";
+    Layout = null;
 }
 
-<h2>Create</h2>
+<!DOCTYPE html>
 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <title>New Product</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#blog-navbar"
+                            aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Tunasha</a>
+                </div>
+                <div class="collapse navbar-collapse" id="blog-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/" class="text-uppercase">Home</a></li>
+                        <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false">Products<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("All Products", "Index", "Product")</li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li role="separator" class="divider"></li>
+                            </ul>
+                        </li>
+                        <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                        <li>@Html.ActionLink("Sign In", "Login", "Account")</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>ProductViewModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    <main>
+        <div class="container">
+            <div class="row">
+                @using (Html.BeginForm("Create", "Shop", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>New Item</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", style = "max-width: 300px;" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", style = "max-width: 300px;" } })
+                                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", style = "max-width: 300px;" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Image", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <input type="file" name="image" accept="image/*" class="form-control" style="max-width: 300px;" />
+                                @*@Html.ValidationMessageFor(model => model.ImageName, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Submit" class="btn btn-info" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
             </div>
         </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <p><b>About Us</b></p>
+                    <p>
+                        Tunasha Technologies is a leading provider of embedded system solutions in Nigeria, providing indeginous expertise in the area of <b>Embedded System Engineering, Electrical/Electronics Engineering, Training, Industrial Automations, Renewable Energy and Custom Designs</b>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p><b>Contact Us</b></p>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                    <div class="address-panel">
+                        <span class="flag nigeria"></span>
+                        <strong>S207/S210 Magnet building, Ladipo Oshodi. Lagos NG </strong><br>
+                        <span>+234 8060989216 <br />+234 8137755683</span>
+                        <br />
+                        <span id="contact_mail">akinsegun06@yahoo.com</span>
+                    </div>
+                    <p></p>
+                </div>
+                <div class="col-md-4">
+                    <p><b>Social Media</b></p>
+                    <ul class="social-media">
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="twitter"><i class="fa fa-twitter fa-2x"></i></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <div class="social-icon-div" id="facebook"><i class="fa fa-facebook-f fa-2x"></i></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="clearfix"></span>
+                    <br />
+                    <p class="lead">&copy; @DateTime.Now.Year Tunasha.<br /> All Rights Reserved.</p>
+                </div>
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
-}
+</body>
+</html>

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TunashaProjects.Models;
+using TunashaProjects.DAL;
 
 namespace TunashaProjects.Misc
 {
@@ -20,6 +22,27 @@ namespace TunashaProjects.Misc
                 newText.Append(line);
                 newText.AppendLine("<br/>");
             }
+            return MvcHtmlString.Create(newText.ToString());
+        }
+
+        public static MvcHtmlString QuantityInCart(this HtmlHelper htmlHelper, string cartGuid)
+        {
+            int cartCount;
+            using (DataContext db = new DataContext())
+            {
+                cartCount = db.Carts.Where(x => x.Guid == cartGuid).Count();
+            }
+            return MvcHtmlString.Create(cartCount.ToString());
+        }
+
+        public static MvcHtmlString EmailToName(this HtmlHelper htmlHelper, string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return MvcHtmlString.Create(text);
+
+            StringBuilder newText = new StringBuilder();
+            string[] lines = text.Split('@');
+            newText.Append(lines[0]);
             return MvcHtmlString.Create(newText.ToString());
         }
 

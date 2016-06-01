@@ -31,14 +31,60 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand">Tunasha</a>
+                    <a class="navbar-brand" href="/">Tunasha</a>
                 </div>
                 <div class="collapse navbar-collapse" id="blog-navbar">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/" class="text-uppercase">Home</a></li>
                         <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
-                        <li><a data-toggle="modal" href="#subscribe-modal" class="text-uppercase">Subscribe</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false">Shop<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("All Items", "Index", "Shop")</li>
+                                <li role="separator" class="divider"></li>
+                                @if (User.IsInRole("User"))
+                                {
+                                    <li>@Html.ActionLink("My Orders", "Index", "MyOrder")</li>
+                                    <li>@Html.ActionLink("Cart", "Index", "Cart")</li>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink("Orders", "Index", "Order")</li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Download <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">PIC MICROCONTROLLER</a></li>
+                                <li><a href="#">Datasheets</a></li>
+                                <li>@Html.ActionLink("Reference Manual", "")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="">ATMEL MICROCONTROLLER</a></li>
+                                <li><a href="#">Datasheets</a></li>
+                                <li>@Html.ActionLink("Reference Manual", "")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">ARDUINO</a></li>
+                            </ul>
+                        </li>
                         <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Log Out", "Logout", "Account")</li>
+                        }
+                        @if (!Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Log In", "Login", "Account")</li>
+                        }
+                        @if (Session["CartGUID"] != null)
+                        {
+                            <li>
+                                <a href="~/MyCart">
+                                    <i class="fa fa-shopping-cart"></i> @Html.QuantityInCart(Session["CartGUID"].ToString())
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -51,61 +97,60 @@
                     <div class="h1 page-header">
                         Blog Posts
                     </div>
-                    @if (Request.IsAuthenticated)
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                     {
-                        <p>
-                            @Html.ActionLink("Create New", "Create")
-                        </p>
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
                     }
                 </div>
             </div>
             <div class="row">
                 @for (int i = 0; i < Model.Count(); i++)
                 {
-                    <div class="col-sm-4">
-                        <div class="panel panel-default post-box">
-                            @if (i % 3 == 0)
+                <div class="col-sm-4">
+                    <div class="panel panel-default post-box">
+                        @if (i % 3 == 0)
                             {
-                                <div class="panel-heading post-box-3"></div>
+                            <div class="panel-heading post-box-3"></div>
                             }
                             else if (i % 2 == 0)
                             {
-                                <div class="panel-heading post-box-2"></div>
+                            <div class="panel-heading post-box-2"></div>
                             }
                             else if (i % 1 == 0)
                             {
-                                <div class="panel-heading post-box-1"></div>
+                            <div class="panel-heading post-box-1"></div>
                             }
-                            <div class="panel-body">
-                                <p class="text-muted text-center category"><em>@Model.ElementAt(i).Date.ToShortDateString()</em></p>
+                        <div class="panel-body">
+                            <p class="text-muted text-center category"><em>@Model.ElementAt(i).Date.ToShortDateString()</em></p>
 
-                                <p class="text-center"><a href="~/Blog/Details/@Model.ElementAt(i).PostID">@Model.ElementAt(i).Title</a></p>
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <div class="text-center">
-                                        <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@Model.ElementAt(i).PostID">
-                                            <span class="answer"><i class="fa fa-remove"></i> delete</span>
-                                        </a>
+                            <p class="text-center"><a href="~/Blog/Details/@Model.ElementAt(i).PostID">@Model.ElementAt(i).Title</a></p>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="text-center">
+                                    <a class="pull-right" data-toggle="modal" href="#delete-comment" data-whatever="@Model.ElementAt(i).PostID">
+                                        <span class="answer"><i class="fa fa-remove"></i> delete</span>
+                                    </a>
 
-                                        
-                                            <a href="~/Blog/Comment/@Model.ElementAt(i).PostID">
-                                                <span class="text-danger">@Html.CommentState(Model.ElementAt(i).DisableComment)</span>
-                                            </a>
+                                    <a href="~/Blog/Comment/@Model.ElementAt(i).PostID">
+                                        <span class="text-danger">@Html.CommentState(Model.ElementAt(i).DisableComment)</span>
+                                    </a>
 
-                                        <a href="~/Blog/Edit/@Model.ElementAt(i).PostID" class="pull-left">
-                                            <span class="answer">
-                                                <i class="fa fa-edit"></i> edit
-                                            </span>
-                                        </a>
-                                    </div>
+                                    <a href="~/Blog/Edit/@Model.ElementAt(i).PostID" class="pull-left">
+                                        <span class="answer">
+                                            <i class="fa fa-edit"></i> edit
+                                        </span>
+                                    </a>
+                                </div>
                                 }
-                                <p></p>
-                            </div>
+                            <p></p>
                         </div>
                     </div>
+                </div>
                     if (i % 3 == 2 && i > 1)
                     {
-                        <span class="clearfix"></span>
+                <span class="clearfix"></span>
                     }
                 }
             </div>
@@ -135,12 +180,16 @@ new
 
                     <div class="address-panel">
                         <span class="flag nigeria"></span>
-                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong><br>
-                        <p>+234 8078657812</p>
+                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong>
+                        <br>
+                        <p>+234 8060989216 <br />+234 8137755683</p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <p><strong>Email: </strong><span id="contact_mail">hello@tunashe.com</span></p>
+                    <p>
+                        <strong>Email: </strong>
+                        <span id="contact_mail">akinsegun06@yahoo.com</span>
+                    </p>
                     <p>&copy;2016 Tunasha. All Rights Reserved.</p>
                 </div>
                 <div class="col-md-3">
@@ -178,9 +227,9 @@ new
 
                 @using (Html.BeginForm("Delete", "Blog", new { }, FormMethod.Post))
                 {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" class="question-id">
-                    <button type="submit" class="btn btn-primary text-uppercase">Delete</button>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" class="question-id">
+                <button type="submit" class="btn btn-primary text-uppercase">Delete</button>
                 }
 
             </div>

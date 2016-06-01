@@ -1,4 +1,5 @@
-﻿@{
+﻿@using TunashaProjects.Misc;
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -23,27 +24,60 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand">Tunasha</a>
+                    <a class="navbar-brand" href="/">Tunasha</a>
                 </div>
                 <div class="collapse navbar-collapse" id="blog-navbar">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/" class="text-uppercase">Home</a></li>
                         <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
-                               aria-expanded="false">Products<span class="caret"></span></a>
+                               aria-expanded="false">Shop<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
+                                <li>@Html.ActionLink("All Items", "Index", "Shop")</li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
+                                @if (User.IsInRole("User"))
+                                {
+                                    <li>@Html.ActionLink("My Orders", "Index", "MyOrder")</li>
+                                    <li>@Html.ActionLink("Cart", "Index", "MyCart")</li>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink("Orders", "Index", "Order")</li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Download <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">PIC MICROCONTROLLER</a></li>
+                                <li><a href="#">Datasheets</a></li>
+                                <li>@Html.ActionLink("Reference Manual", "")</li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
+                                <li><a href="">ATMEL MICROCONTROLLER</a></li>
+                                <li><a href="#">Datasheets</a></li>
+                                <li>@Html.ActionLink("Reference Manual", "")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">ARDUINO</a></li>
                             </ul>
                         </li>
                         <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Log Out", "Logout", "Account")</li>
+                        }
+                        @if (!Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Log In", "Login", "Account")</li>
+                        }
+                        @if (Session["CartGUID"] != null)
+                        {
+                            <li>
+                                <a href="~/MyCart">
+                                   <i class="fa fa-shopping-cart"></i> @Html.QuantityInCart(Session["CartGUID"].ToString())
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -97,9 +131,7 @@
                 <h1>Nigeria's number one electronics community.</h1>
 
                 <h4 class="text-muted">
-                    Tunasha is a community based platform for electronics enthusiasts <br>Shop for
-                    components,
-                    share ideas and build awesome projects
+                    This is a community based platform for Professionals, Researchers, Electronics Engineers, Electronics Enthusiasts and Students to shop for components, share ideas, keep up with innovation and build awesome projects.
                 </h4>
             </div>
         </div>
@@ -151,9 +183,9 @@
                     <h1 class="text-center">The Tunasha Store</h1>
                     <h4 class="text-center text-muted">
                         Need Inspiration for your next project? Get inspired for that next project of yours by<br>
-                        making use of one of our numerous project ideas posted<br>
-                        on our blog.We have just the right articles to keep you informed and educated.
+                        making use of one of our numerous project ideas posted on our blog.<br>We have just the right articles to keep you informed and educated.
                     </h4>
+
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -191,8 +223,6 @@
                                     ut
                                     labore et dolore magna aliqua.
                                 </p>
-
-
                                 <a href="" class="text-uppercase read-more-link">
                                     <i class="fa fa-shopping-cart"></i> Buy Now
                                 </a>
@@ -220,7 +250,6 @@
                                     <i class="fa fa-shopping-cart"></i> Buy Now
                                 </a>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -229,7 +258,6 @@
                         <div class="center-block">
                             <a href="blog_list.html" class="btn btn-info btn-lg">View All Products</a>
                         </div>
-
                     </div>
                 </div>
 
@@ -238,13 +266,11 @@
         </div>
         <div class="row sections forum-section">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="row text-center">
+                    <div class="col-md-4 text-center">
                         <h1>Our Forum</h1>
                         <h4>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore
-                            et dolore magna aliqua.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                         </h4>
                         @Html.ActionLink("Visit Forum", "Index", "Forum", null, new { @class = "btn btn-lg btn-info" })
                     </div>
@@ -257,9 +283,8 @@
                 <div class="row sections">
                     <h1 class="text-center">The Tunasha Blogosphere</h1>
                     <h4 class="text-center text-muted">
-                        Need Inspiration for your next project? Get inspired for that next project of yours by<br>
-                        making use of one of our numerous project ideas posted<br>
-                        on our blog.We have just the right articles to keep you informed and educated.
+                        Get inspired for that next project of yours by making use of one of the numerous project ideas posted on our blog.
+                        <br />We have just the right articles to keep you informed and educated.
                     </h4>
                 </div>
                 <div class="row">
@@ -342,27 +367,25 @@
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="logo">Tunasha</div>
+                <div class="col-md-4">
+                    <p><b>About Us</b></p>
                     <p>
-                        At Tunasha, we are on a mission to help our customers with all they need for their electronics
-                        projects. Tools, components, techniques, lessons, we've got it all.
+                        Tunasha Technologies is a leading provider of embedded system solutions in Nigeria, providing indeginous expertise in the area of <b>Embedded System Engineering, Electrical/Electronics Engineering, Training, Industrial Automations, Renewable Energy and Custom Designs</b>
                     </p>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <p><b>Contact Us</b></p>
 
                     <div class="address-panel">
                         <span class="flag nigeria"></span>
-                        <strong>1, Jerry Iriabe, Lekki, Lagos NG</strong><br>
-                        <p>+234 8060989216 <br />+234 8137755683</p>
+                        <strong>S207/S210 Magnet building, Ladipo Oshodi. Lagos NG </strong><br>
+                        <span>+234 8060989216 <br />+234 8137755683</span>
+                        <br />
+                        <span id="contact_mail">akinsegun06@yahoo.com</span>
                     </div>
+                    <p></p>
                 </div>
-                <div class="col-md-3">
-                    <p><strong>Email: </strong><span id="contact_mail">akinsegun06@yahoo.com</span></p>
-                    <p>&copy;2016 Tunasha. All Rights Reserved.</p>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <p><b>Social Media</b></p>
                     <ul class="social-media">
                         <li>
@@ -376,7 +399,9 @@
                             </a>
                         </li>
                     </ul>
-
+                    <span class="clearfix"></span>
+                    <br />
+                    <p class="lead">&copy; @DateTime.Now.Year Tunasha.<br /> All Rights Reserved.</p>
                 </div>
             </div>
         </div>

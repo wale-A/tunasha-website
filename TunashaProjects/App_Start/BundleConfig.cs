@@ -28,21 +28,24 @@ namespace TunashaProjects
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",
-                     /* "~/Content/site.css"*/
+                      "~/Content/Site.css",
                       "~/Content/main.css",
+                      "~/Content/Site.css",
+                      "~/Content/site.css",
                       "~/Content/font-awesome.min.css"));
 
             bundles.Add(new StyleBundle("~/Content/home").Include(
                       "~/Content/bootstrap.min.css",
-                /* "~/Content/site.css"*/
-                      "~/Content/home.css",
                       "~/Content/main.css",
+                      "~/Content/home.css",
+                      "~/Content/Site.css",
+                      "~/Content/site.css",
                       "~/Content/animate.min.css",
                       "~/Content/font-awesome.min.css"));
 
             bundles.Add(new StyleBundle("~/Content/login").Include(
                       "~/Content/bootstrap.min.css",
-                /* "~/Content/site.css"*/
+                      "~/Content/Site.css",
                       "~/Content/login.css",
                       "~/Content/font-awesome.min.css"));
         }

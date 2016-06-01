@@ -135,8 +135,9 @@
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
-    <Compile Include="Controllers\OrdersController.cs" />
-    <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\MyCartController.cs" />
+    <Compile Include="Controllers\MyOrderController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="DAL\DataContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -178,9 +179,17 @@
     <Compile Include="Migrations\201605282127453_store.Designer.cs">
       <DependentUpon>201605282127453_store.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201605282306516_store_Order.cs" />
-    <Compile Include="Migrations\201605282306516_store_Order.Designer.cs">
-      <DependentUpon>201605282306516_store_Order.cs</DependentUpon>
+    <Compile Include="Migrations\201605292106287_store_Order.cs" />
+    <Compile Include="Migrations\201605292106287_store_Order.Designer.cs">
+      <DependentUpon>201605292106287_store_Order.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605311201560_changeToOrder.cs" />
+    <Compile Include="Migrations\201605311201560_changeToOrder.Designer.cs">
+      <DependentUpon>201605311201560_changeToOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605311329094_changeToOrder_2.cs" />
+    <Compile Include="Migrations\201605311329094_changeToOrder_2.Designer.cs">
+      <DependentUpon>201605311329094_changeToOrder_2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Misc\Enums.cs" />
@@ -510,39 +519,30 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Blog\Delete.cshtml" />
-    <Content Include="Views\Blog\Detailss.cshtml" />
-    <Content Include="Views\Blog\Editt.cshtml" />
-    <Content Include="Views\Blog\Indexx.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Blog\Createe.cshtml" />
-    <Content Include="Views\Forum\Delete.cshtml" />
     <Content Include="Views\Forum\Details.cshtml" />
-    <Content Include="Views\Forum\Edit.cshtml" />
-    <Content Include="Views\Forum\Indexx.cshtml" />
-    <Content Include="Views\Forum\Create.cshtml" />
     <Content Include="Views\Forum\reply.cshtml" />
-    <Content Include="Views\Shop\Delete.cshtml" />
-    <Content Include="Views\Shop\Details.cshtml" />
-    <Content Include="Views\Shop\Edit.cshtml" />
-    <Content Include="Views\Shop\Index.cshtml" />
-    <Content Include="Views\Shop\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\tinymce_jquery_full.cshtml" />
     <Content Include="Views\Blog\Index.cshtml" />
     <Content Include="Views\Blog\Details.cshtml" />
     <Content Include="Views\Blog\Create.cshtml" />
     <Content Include="Views\Forum\Index.cshtml" />
     <Content Include="Views\Blog\Edit.cshtml" />
+    <Content Include="Views\Shop\Index.cshtml" />
+    <Content Include="Views\Shop\Create.cshtml" />
+    <Content Include="Views\MyCart\Index.cshtml" />
+    <Content Include="Views\MyOrder\NewOrder.cshtml" />
+    <Content Include="Views\MyOrder\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\Blog\" />
     <Folder Include="Images\Posts\" />
+    <Folder Include="Images\Products\" />
     <Folder Include="Views\Orders\" />
+    <Folder Include="Views\Order\" />
     <Folder Include="Views\Products\" />
   </ItemGroup>
   <ItemGroup>
@@ -580,8 +580,14 @@
     <EmbeddedResource Include="Migrations\201605282127453_store.resx">
       <DependentUpon>201605282127453_store.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605282306516_store_Order.resx">
-      <DependentUpon>201605282306516_store_Order.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201605292106287_store_Order.resx">
+      <DependentUpon>201605292106287_store_Order.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605311201560_changeToOrder.resx">
+      <DependentUpon>201605311201560_changeToOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605311329094_changeToOrder_2.resx">
+      <DependentUpon>201605311329094_changeToOrder_2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

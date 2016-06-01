@@ -1,8 +1,5 @@
-﻿@model PagedList.IPagedList<TunashaProjects.Models.Product>
-@using PagedList.Mvc;
+﻿@model TunashaProjects.Models.OrderViewModel
 @using TunashaProjects.Misc;
-
-
 @{
     Layout = null;
 }
@@ -11,13 +8,20 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
     <meta charset="UTF-8">
-    <title>Shop</title>
-    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title>New Order</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <style>
+        input {
+            max-width: 300px;
+        }
+        textarea {
+            max-width: 500px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -45,8 +49,12 @@
                                 <li role="separator" class="divider"></li>
                                 @if (User.IsInRole("User"))
                                 {
-                                    <li>@Html.ActionLink("My Order", "Index", "MyOrder")</li>
-                                    <li>@Html.ActionLink("Cart", "Index", "MyCart")</li>
+                                    <li>@Html.ActionLink("My Orders", "Index", "MyOrder")</li>
+                                    <li>@Html.ActionLink("Cart", "Index", "Cart")</li>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink("Orders", "Index", "Order")</li>
                                 }
                             </ul>
                         </li>
@@ -85,63 +93,70 @@
                 </div>
             </div>
         </nav>
-    </header> 
-    <main class="blog-posts">
+    </header>
+
+    <main>
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="h1 page-header">
-                        All Items
-                    </div>
-                    <p class="text-center">
-                        @using (Html.BeginForm("Index", "Product", FormMethod.Get))
-                        {
-                            <div class="form-group">
-                                <label class="sr-only">Search</label>
-                                @Html.TextBox("searchQuery", ViewBag.CurrentFilter as string, new { @class = "form-control input-lg forum-search-box", placeholder = "Enter a search term here...", type = "search" })
-                            </div>
-                        }
-                    </p>
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-                    {
-                        <p>
-                            @Html.ActionLink("Create New", "Create")
-                        </p>
-                    }
-                    </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-md-3 col-sm-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <img src="~/Images/Products/@item.Image.FilePath" class="img-responsive">
-                            </div>
-                            <div class="panel-body">
-                                <h3>@item.Name</h3>
-                                <p class="text-muted"> @item.Description </p>
-                                <div class="text-center">
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <a class="pull-left" data-toggle="modal" href="#delete-comment" data-whatever="@item.ProductID"><span class="answer text-danger"><i class="fa fa-remove"></i> delete</span></a>
-                                        <a class="pull-right" data-toggle="modal" href="~/Shop/Edit/@item.ProductID"><span class="text-primary"><i class="fa fa-edit"></i> edit</span></a>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-success"><b>@item.Price</b></span>
-                                        <a href="~/Shop/AddToCart/@item.ProductID" class="text-uppercase read-more-link pull-right"><i class="fa fa-shopping-cart"></i> Add to cart </a>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-
+                <h3>New Order</h3>
             </div>
-            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
-            @Model.PageCount
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
         </div>
     </main>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerPhone, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CustomerPhone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CustomerPhone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerPhone2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CustomerPhone2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CustomerPhone2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CustomerAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CustomerAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerAddress2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CustomerAddress2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CustomerAddress2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Place Order" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
     <footer class="footer">
         <div class="container">
             <div class="row">
@@ -184,63 +199,9 @@
             </div>
         </div>
     </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/siteScript")
 </body>
-
-<div class="modal fade" id="delete-comment" aria-hidden="true" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h2 class="modal-title text-center text-danger">Delete</h2>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this item</p>
-
-                @using (Html.BeginForm("Delete", "Shop", new { }, FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" class="product-id">
-                    <button type="submit" class="btn btn-danger text-uppercase">Delete</button>
-                }
-
-            </div>
-        </div>
-    </div>
-</div>
-
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/siteScript")
-
-<script type="text/javascript">
-    $('#delete-comment').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('whatever')
-        var modal = $(this)
-        modal.find('.product-id').val(id)
-    })
-</script>
-
-<div class="modal fade" id="subscribe-modal" aria-hidden="true" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h2 class="modal-title text-center">Newsletter Sign Up</h2>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Sign Up and get awesome articles on electronics projects every two weeks</p>
-                <form>
-                    <input class="form-control input-lg" type="email" placeholder="Email Address">
-                    <button type="submit" class="btn btn-primary text-uppercase">Subscribe</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 </html>

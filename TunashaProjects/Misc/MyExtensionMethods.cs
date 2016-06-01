@@ -27,7 +27,7 @@ namespace TunashaProjects.Misc
             string lowerText = text.ToLower();
 
             foreach (string s in queryString)
-                if (queryString.Contains(s))
+                if (lowerText.Contains(s))
                         return true;
 
             return false;

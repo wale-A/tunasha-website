@@ -147,19 +147,19 @@ namespace TunashaProjects.Controllers
         //}
 
         // GET: Forum/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Question question = db.Questions.Find(id);
-            if (question == null)
-            {
-                return HttpNotFound();
-            }
-            return View(question);
-        }
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Question question = db.Questions.Find(id);
+        //    if (question == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(question);
+        //}
 
         // POST: Forum/Delete/5
         [HttpPost, ActionName("Delete")]

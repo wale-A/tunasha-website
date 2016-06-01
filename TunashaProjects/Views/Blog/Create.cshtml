@@ -1,4 +1,5 @@
 ﻿@model TunashaProjects.Models.PostViewModel
+@using TunashaProjects.Misc;
 @{
     Layout = null;
 }
@@ -28,14 +29,60 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand">Tunasha</a>
+                    <a class="navbar-brand" href="/">Tunasha</a>
                 </div>
                 <div class="collapse navbar-collapse" id="blog-navbar">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/" class="text-uppercase">Home</a></li>
                         <li>@Html.ActionLink("Blog", "Index", "Blog", null, new { @class = "text-uppercase" })</li>
-                        <li><a data-toggle="modal" href="#subscribe-modal" class="text-uppercase">Subscribe</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false">Shop<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("All Items", "Index", "Shop")</li>
+                                <li role="separator" class="divider"></li>
+                                @if (User.IsInRole("User"))
+                                {
+                                    <li>@Html.ActionLink("My Orders", "Index", "MyOrder")</li>
+                                    <li>@Html.ActionLink("Cart", "Index", "Cart")</li>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink("Orders", "Index", "Order")</li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Download <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">PIC MICROCONTROLLER</a></li>
+                                <li><a href="#">Datasheets</a></li>
+                                <li>@Html.ActionLink("Reference Manual", "")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="">ATMEL MICROCONTROLLER</a></li>
+                                <li><a href="#">Datasheets</a></li>
+                                <li>@Html.ActionLink("Reference Manual", "")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">ARDUINO</a></li>
+                            </ul>
+                        </li>
                         <li>@Html.ActionLink("Forum", "Index", "Forum", null, new { @class = "text-uppercase" })</li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Log Out", "Logout", "Account")</li>
+                        }
+                        @if (!Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Log In", "Login", "Account")</li>
+                        }
+                        @if (Session["CartGUID"] != null)
+                        {
+                            <li>
+                                <a href="~/MyCart">
+                                    <i class="fa fa-shopping-cart"></i> @Html.QuantityInCart(Session["CartGUID"].ToString())
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

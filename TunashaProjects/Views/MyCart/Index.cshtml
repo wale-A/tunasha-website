@@ -1,8 +1,6 @@
-﻿@model PagedList.IPagedList<TunashaProjects.Models.Product>
+﻿@model PagedList.IPagedList<TunashaProjects.Models.Cart>
 @using PagedList.Mvc;
 @using TunashaProjects.Misc;
-
-
 @{
     Layout = null;
 }
@@ -11,10 +9,9 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
     <meta charset="UTF-8">
-    <title>Shop</title>
-    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title>My Cart</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -45,8 +42,12 @@
                                 <li role="separator" class="divider"></li>
                                 @if (User.IsInRole("User"))
                                 {
-                                    <li>@Html.ActionLink("My Order", "Index", "MyOrder")</li>
+                                    <li>@Html.ActionLink("My Orders", "Index", "MyOrder")</li>
                                     <li>@Html.ActionLink("Cart", "Index", "MyCart")</li>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>@Html.ActionLink("Orders", "Index", "Order")</li>
                                 }
                             </ul>
                         </li>
@@ -85,61 +86,64 @@
                 </div>
             </div>
         </nav>
-    </header> 
-    <main class="blog-posts">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="h1 page-header">
-                        All Items
-                    </div>
-                    <p class="text-center">
-                        @using (Html.BeginForm("Index", "Product", FormMethod.Get))
-                        {
-                            <div class="form-group">
-                                <label class="sr-only">Search</label>
-                                @Html.TextBox("searchQuery", ViewBag.CurrentFilter as string, new { @class = "form-control input-lg forum-search-box", placeholder = "Enter a search term here...", type = "search" })
-                            </div>
-                        }
-                    </p>
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
-                    {
-                        <p>
-                            @Html.ActionLink("Create New", "Create")
-                        </p>
-                    }
-                    </div>
-                @foreach (var item in Model)
-                {
-                    <div class="col-md-3 col-sm-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <img src="~/Images/Products/@item.Image.FilePath" class="img-responsive">
-                            </div>
-                            <div class="panel-body">
-                                <h3>@item.Name</h3>
-                                <p class="text-muted"> @item.Description </p>
-                                <div class="text-center">
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <a class="pull-left" data-toggle="modal" href="#delete-comment" data-whatever="@item.ProductID"><span class="answer text-danger"><i class="fa fa-remove"></i> delete</span></a>
-                                        <a class="pull-right" data-toggle="modal" href="~/Shop/Edit/@item.ProductID"><span class="text-primary"><i class="fa fa-edit"></i> edit</span></a>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-success"><b>@item.Price</b></span>
-                                        <a href="~/Shop/AddToCart/@item.ProductID" class="text-uppercase read-more-link pull-right"><i class="fa fa-shopping-cart"></i> Add to cart </a>
-                                    }
-                                </div>
-                            </div>
+    </header>
+
+    <main>
+        <div class="forum-questions">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-12 page-header">
+                        <div>
+                            <span class="h3">My Cart</span>
+                            @if (Model.Count > 0)
+                            {
+                                <span class="pull-right">
+                                    <a href="~/MyOrder/NewOrder" class="btn btn-warning">Place Order</a>
+                                </span>
+                            }
                         </div>
                     </div>
-                }
+                    <div class="col-sm-8 col-xs-12">
+                        @if (Model.Count == 0)
+                        {
+                            <div class="h2 text-danger">
+                                No item in cart
+                            </div>
+                        }
+                        <ul class="list-group">
 
+                            @foreach (var item in Model)
+                            {
+                                <li class="list-group-item">
+                                    <div>
+                                        <span class="lead">@item.Product.Name</span>
+                                        <b class="pull-right text-success">@item.Product.Price</b>
+                                        <br />
+                                        @item.Product.Description<br />
+                                        <a data-toggle="modal" href="#delete-comment" data-whatever="@item.ID">
+                                            <span class="answer"><i class="fa fa-remove"></i> remove from cart</span>
+                                        </a>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        <br />
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
+                        @Model.PageCount
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                    </div>
+
+                    <span class="clearfix">
+                    </span>
+                    @if (Model.Count > 0)
+                    {
+                        <span>
+                            <a href="~/MyOrder/NewOrder" class="btn btn-warning">Place Order</a>
+                        </span>
+                    }
+                </div>
             </div>
-            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
-            @Model.PageCount
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
         </div>
     </main>
     <footer class="footer">
@@ -193,16 +197,16 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h2 class="modal-title text-center text-danger">Delete</h2>
+                <h2 class="modal-title text-center text-danger">Remove from cart</h2>
             </div>
             <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this item</p>
+                <p class="text-center">Are you sure you want to remove this item ?</p>
 
-                @using (Html.BeginForm("Delete", "Shop", new { }, FormMethod.Post))
+                @using (Html.BeginForm("Delete", "MyCart", new { }, FormMethod.Post))
                 {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" class="product-id">
-                    <button type="submit" class="btn btn-danger text-uppercase">Delete</button>
+                    @Html.AntiForgeryToken();
+                    <input type="hidden" name="id" class="question-id">
+                    <button type="submit" class="btn btn-danger text-uppercase">Continue</button>
                 }
 
             </div>
@@ -214,33 +218,18 @@
 @Scripts.Render("~/bundles/bootstrap")
 @Scripts.Render("~/bundles/siteScript")
 
+@*<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>
+            tinymce.init({ selector: 'textarea' });
+    </script>*@
 <script type="text/javascript">
     $('#delete-comment').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('whatever')
         var modal = $(this)
-        modal.find('.product-id').val(id)
+        modal.find('.question-id').val(id)
     })
 </script>
 
-<div class="modal fade" id="subscribe-modal" aria-hidden="true" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h2 class="modal-title text-center">Newsletter Sign Up</h2>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Sign Up and get awesome articles on electronics projects every two weeks</p>
-                <form>
-                    <input class="form-control input-lg" type="email" placeholder="Email Address">
-                    <button type="submit" class="btn btn-primary text-uppercase">Subscribe</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 </html>

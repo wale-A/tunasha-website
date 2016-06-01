@@ -7,13 +7,13 @@ namespace TunashaProjects.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class store_Order : IMigrationMetadata
+    public sealed partial class changeToOrder : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(store_Order));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(changeToOrder));
         
         string IMigrationMetadata.Id
         {
-            get { return "201605282306516_store_Order"; }
+            get { return "201605311201560_changeToOrder"; }
         }
         
         string IMigrationMetadata.Source

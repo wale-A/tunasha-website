@@ -50,14 +50,14 @@ namespace TunashaProjects.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel user)
         {
             if (ModelState.IsValid)
             {
                 User u = db.Users.SingleOrDefault(x => x.Email == user.Email && x.Password == user.Password);
                 if (u != null)
-                    FormsAuthentication.RedirectFromLoginPage(u.Name, user.RememberMe);
+                    FormsAuthentication.RedirectFromLoginPage(u.Email, user.RememberMe);
                 
                 //else
                 ModelState.AddModelError(string.Empty, "invalid email or password");
@@ -68,6 +68,12 @@ namespace TunashaProjects.Controllers
             }
 
             return View(user);
+        }
+
+        public ActionResult Logout(LoginViewModel user)
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
         }
 
         //// GET: Account/Edit/5
